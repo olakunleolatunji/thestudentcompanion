@@ -1,0 +1,783 @@
+{% extends "layout.html" %}
+{% block title %}
+Timetable
+{% endblock %} 
+
+{% block main %}
+    
+<div class="page-container">
+<table class="table" id="classTable">
+    <h1 class="tablehead">Timetable</h1>
+    <thead class="table-header">
+    <tr>
+        <th scope="col" class="class-day-column">Day</th>
+        <th scope="col" class="class-time-column">Time</th>
+        <th scope="col" class="class-code-column">Course</th>
+        <th scope="col" class="class-venue-column">Venue</th>
+        <th scope="col" class="class-edit-column">Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr id="monday">
+        <td class="side-header" rowspan="{{mondaySpan}}" scope="rowgroup">MONDAY</td>
+        {% if firstMonday %}
+        <td scope="row" id="timeRow">{{ firstMonday.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ firstMonday.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ firstMonday.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ firstMonday.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ firstMonday.id }}" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% for lecture in monday %}
+      <tr id="mondayCont">
+        <td scope="row" id="timeRow">{{ lecture.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ lecture.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ lecture.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ lecture.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ lecture.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr id="tuesday">
+        <td class="side-header" rowspan="{{tuesdaySpan}}" scope="rowgroup">TUESDAY</td>
+        {% if firstTuesday %}
+        <td scope="row" id="timeRow">{{ firstTuesday.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ firstTuesday.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ firstTuesday.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ firstTuesday.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ firstTuesday.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% for lecture in tuesday %}
+      <tr id="tuesdayCont">
+        <td scope="row" id="timeRow">{{ lecture.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ lecture.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ lecture.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ lecture.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ lecture.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr id="wednesday">
+        <td class="side-header" rowspan="{{wednesdaySpan}}" scope="rowgroup">WEDNESDAY</td>
+        {% if firstWednesday %}
+        <td scope="row" id="timeRow">{{ firstWednesday.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ firstWednesday.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ firstWednesday.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ firstWednesday.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ firstWednesday.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% for lecture in wednesday %}
+      <tr id="wednesdayCont">
+        <td scope="row" id="timeRow">{{ lecture.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ lecture.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ lecture.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ lecture.id }}" type="submit" id="editButton" name="edit">Edit</button></a> 
+                        <button id="deleteButton" type="submit" value="{{ lecture.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr id="thursday">
+        <td class="side-header" rowspan="{{thursdaySpan}}" scope="rowgroup">THURSDAY</td>
+        {% if firstThursday %}
+        <td scope="row" id="timeRow">{{ firstThursday.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ firstThursday.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ firstThursday.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ firstThursday.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ firstThursday.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% for lecture in thursday %}
+      <tr id="thursdayCont">
+        <td scope="row" id="timeRow">{{ lecture.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ lecture.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ lecture.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ lecture.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ lecture.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr id="friday">
+        <td class="side-header" rowspan="{{fridaySpan}}" scope="rowgroup">FRIDAY</td>
+        {% if firstFriday %}
+        <td scope="row" id="timeRow">{{ firstFriday.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ firstFriday.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ firstFriday.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ firstFriday.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ firstFriday.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% for lecture in friday %}
+      <tr id="fridayCont">
+        <td scope="row" id="timeRow">{{ lecture.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ lecture.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ lecture.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ lecture.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ lecture.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr id="saturday">
+        <td class="side-header" rowspan="{{saturdaySpan}}" scope="rowgroup">SATURDAY</td>
+        {% if firstSaturday %}
+        <td scope="row" id="timeRow">{{ firstSaturday.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ firstSaturday.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ firstSaturday.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ firstSaturday.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ firstSaturday.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% for lecture in saturday %}
+      <tr id="saturdayCont">
+        <td scope="row" id="timeRow">{{ lecture.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ lecture.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ lecture.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                      <a href="#editClassForm"><button value="{{ lecture.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ lecture.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr id="sunday">
+        <td class="side-header" rowspan="{{sundaySpan}}" scope="rowgroup">SUNDAY</td>
+        {% if firstSunday %}
+        <td scope="row" id="timeRow">{{ firstSunday.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ firstSunday.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ firstSunday.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ firstSunday.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ firstSunday.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% for lecture in sunday %}
+      <tr id="sundayCont">
+        <td scope="row" id="timeRow">{{ lecture.classTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ lecture.courseCode }}</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ lecture.classVenue}}</td>
+        <td scope="row" id="optionsRow">
+            <div class="options-hamburger">
+            <div class="oh-linewrapper">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                <div class="options-menu">
+                    <ul>
+                    <li>
+                        <a href="#editClassForm"><button value="{{ lecture.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                        <button id="deleteButton" type="submit" value="{{ lecture.id }}" id="deleteButton" name="delete">&#10008</button> 
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="new-button-div">
+    <a href="#newClassForm"><button type="button" class="new-at-button">New Class</button></a>
+  </div>
+  
+  <!-- Add New Class -->
+  <form class="new-at-form" id="newClassForm">
+    <div class="input-wrapper">
+      <h3 class="tablehead">Add a New Class</h3>
+        <div class="input-box">
+          <label for="classDay">Day</label>
+            <select autofocus class="form-control" id="classDay" name="classDay" type="text" required>
+            <option disabled selected value>Select Day</option>
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+            <option value="sunday">Sunday</option>
+            </select>
+        </div>
+        <div class="input-box">
+          <label for="classTimeStart">Start Time</label>
+            <input autocomplete="off" class="form-control" id="classTimeStart" name="classTime" placeholder="Enter start time" type="time" required>
+        </div>
+        <div class="input-box">
+          <label for="classTimeEnd">Stop Time</label>
+            <input autocomplete="off" class="form-control" id="classTimeEnd" name="classTime" placeholder="Enter stop time" type="time" required>
+        </div>
+        <div class="input-box">
+          <label for="courseCode">Course Code</label>
+            <select class="form-control" id="courseCode" name="courseCode" required>
+                <option disabled selected value>Select Course Code</option>
+                {% for course in courses %} 
+                    <option value="{{ course.courseCode }}">{{ course.courseCode }}</option>  
+                {% endfor %} 
+            </select>
+        </div>
+        <div class="input-box">
+          <label for="classVenue">Venue</label>
+            <input autocomplete="off" class="form-control" id="classVenue" name="classVenue" placeholder="Enter class venue" type="text" maxlength="30" required>
+        </div>
+        <a href="/help#helpClassAddEditDelete"><div class="error"></div></a>
+        <button class="add-course-button" value="A" id="addAT" name="addAT" type="submit">Add Class</button>
+      </div>
+  </form>
+  <!-- Edit an Assessment -->
+  <form class="edit-course-form" id="editClassForm">
+    <div class="input-wrapper">
+    <h3 class="tablehead"></h3>
+    <div class="input-box">
+        <label for="classDay">Day</label>
+        <select autofocus id="classDay" name="classDay" type="text" required>
+        <option disabled selected>Day</option>
+        <option value="monday">Monday</option>
+        <option value="tuesday">Tuesday</option>
+        <option value="wednesday">Wednesday</option>
+        <option value="thursday">Thursday</option>
+        <option value="friday">Friday</option>
+        <option value="saturday">Saturday</option>
+        <option value="sunday">Sunday</option>
+        </select>
+    </div>
+    <div class="input-box">
+      <label for="classTimeStart">Start Time</label>
+        <input autocomplete="off" class="form-control" id="classTimeStart" name="classTime" placeholder="Enter start time" type="time" required>
+    </div>
+    <div class="input-box">
+      <label for="classTimeEnd">Stop Time</label>
+      <input autocomplete="off" class="form-control" id="classTimeEnd" name="classTime" placeholder="Enter stop time" type="time" required>
+    </div>
+    <div class="input-box">
+      <label for="courseCode">Course Code</label>
+        <select id="courseCode" name="courseCode" required>
+            <option disabled selected value>Course Code</option>
+            {% for course in courses %} 
+                <option value="{{ course.courseCode }}">{{ course.courseCode }}</option>  
+            {% endfor %} 
+        </select>
+    </div>
+    <div class="input-box">
+      <label for="classVenue">Class Venue</label>
+        <input autocomplete="off" class="form-control" id="classVenue" name="classVenue" placeholder="Enter class venue" type="text" maxlength="30" required>
+    </div>
+    <a href="/help#helpClassAddEditDelete"><div class="error"></div></a>
+    <div class="input-wrapper-button-wrapper">
+  <button class="add-course-button" value="" id="cancelButton" name="cancel" type="submit">Cancel</button>
+  <button class="add-course-button" value="" id="saveButton" name="saveEdit" type="submit">Save</button>
+</div>
+</div>
+</form>
+</div>
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+  // Show new class form
+  $(".new-at-button").click(function(){
+      if($(".new-at-button").hasClass("cancel")){
+      $(".new-at-button").removeClass("cancel");
+      $(".new-at-button").text("Add a New Class");
+      $(".new-at-form").toggleClass("active");
+      $(".edit-course-form").removeClass("active");
+      $("#newClassForm").trigger("reset");
+      $(".error").text("");
+      return;
+    }
+    $(".new-at-form").toggleClass("active");
+      $(".edit-course-form").removeClass("active");
+      $(".new-at-button").addClass("cancel");
+      $(".new-at-button").text("Cancel");
+      $(".error").text("");
+    });
+// Show edit and delete buttons
+$(document).on("click", ".oh-linewrapper",function(e){
+  e.preventDefault();
+  var self = $(this).closest(".options-hamburger").children(".options-menu");
+  // If another options menu is open, close it first
+  if(self.hasClass("active")){
+    self.toggleClass("active");
+    return;
+  }
+  $(".options-menu").removeClass("active");
+  self.toggleClass("active"); 
+});
+
+    // Add a new class using Ajax
+    $("#newClassForm").on("submit", function(e){
+        e.preventDefault();
+        var data = {
+          courseCode: $(".new-at-form #courseCode").val(),
+          classDay: $(".new-at-form #classDay").val(),
+          classTime: $(".new-at-form #classTimeStart").val() +" - "+ $(".new-at-form #classTimeEnd").val(),
+          classVenue: $(".new-at-form #classVenue").val(),
+          classId: null,
+          classDayNumber: null,
+          status: "add"
+        }
+        $.ajax({
+          type:'POST',
+          url: '/timetable',
+          dataType: 'json',
+          contentType: 'application/json; charset=utf-8',
+          data: JSON.stringify(data),
+          success: function(callback) {
+            if(callback.classDayNumber == 0){
+              $(".table tbody #" + callback.classDay).append(
+                '<td scope="row" id="timeRow">'+callback.classTime+'</td>'+
+                '<td scope="row" class="wrap-this" id="codeRow">'+callback.courseCode+'</td>'+
+                '<td scope="row" class="wrap-this" id="venueRow">'+callback.classVenue+'</td>'+
+                '<td scope="row" id="optionsRow">'+
+                    '<div class="options-hamburger">'+
+                    '<div class="oh-linewrapper">'+
+                    '<div class="dot"></div>'+
+                    '<div class="dot"></div>'+
+                    '<div class="dot"></div>'+
+                    '</div>'+
+                        '<div class="options-menu">'+
+                            '<ul>'+
+                            '<li>'+
+                                '<a href="#editClassForm"><button value="'+callback.classId+'" type="submit" id="editButton" name="edit">Edit</button></a>'+
+                                '<button id="deleteButton" type="submit" value="'+callback.classId+'" id="deleteButton" name="delete">&#10008</button>'+
+                            '</li>'+
+                        '</ul>'+
+                        '</div>'+
+                    '</div>'+
+                '</td>'
+            );}
+            if(callback.classDayNumber >= 1){
+            $(".table tbody #" + callback.classDay).closest("tr").after(
+                '<tr id="'+callback.classDay+'Cont">'+
+                '<td scope="row" id="timeRow">'+callback.classTime+'</td>'+
+                '<td scope="row" class="wrap-this" id="codeRow">'+callback.courseCode+'</td>'+
+                '<td scope="row" class="wrap-this" id="venueRow">'+callback.classVenue+'</td>'+
+                '<td scope="row" id="optionsRow">'+
+                    '<div class="options-hamburger">'+
+                    '<div class="oh-linewrapper">'+
+                    '<div class="dot"></div>'+
+                    '<div class="dot"></div>'+
+                    '<div class="dot"></div>'+
+                    '</div>'+
+                        '<div class="options-menu">'+
+                            '<ul>'+
+                            '<li>'+
+                                '<a href="editClassForm"><button value="'+callback.classId+'" type="submit" id="editButton" name="edit">Edit</button></a>'+
+                                '<button id="deleteButton" type="submit" value="'+callback.classId+'" id="deleteButton" name="delete">&#10008</button>'+
+                            '</li>'+
+                        '</ul>'+
+                        '</div>'+
+                    '</div>'+
+                '</td>'+
+                '</tr>'
+            );
+            current = parseInt(callback.classDayNumber);
+            extra = parseInt(1);
+            total = current + extra;
+            // $("#"+callback.classDay+":first-child").attr("rowspan", total);
+            $("#"+callback.classDay+ " .side-header").attr("rowspan", total);
+            }
+              $("#newClassForm").trigger('reset');
+              $(".new-at-form").removeClass("active");
+              $(".new-at-button").text("New Class");
+              $(".new-at-button").removeClass("cancel");
+              $(".error").text("");
+          },
+          error: function(){
+            $(".new-at-button").text("Cancel");
+            $(".error").text("Something went wrong!");
+          }
+        });
+    });
+
+    // Get form to edit
+    $("table").on("click", "#editButton", function(e){
+      // Make sure cancel only shows when add form is opened
+      $(".new-at-button").removeClass("cancel");
+      $(".new-at-button").text("Add a New Class");
+      // Make sure that clicking edit on a new row will open the form straight away
+      if($(".edit-course-form").hasClass("active")){
+        $(".edit-course-form").toggleClass("active");
+        }
+        $(".new-at-form").removeClass("active");
+      $(".edit-course-form").toggleClass("active");
+        window.rowtoedit = $(this);
+        var classId = $(this).val();
+        var data = {classId: classId, courseCode: null, classVenue: null, classTime: null, currentClassDayNumber:null ,classDay:null, status: "edit"}
+        $.ajax({
+                type: 'POST',
+                url: '/timetable',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if(callback.status === "DONE"){
+                        var classTimeStart = callback.classTime.slice(0,5);
+                        var classTimeEnd = callback.classTime.slice(8);                  
+                        // Select the elements this way because the elements for the new course form have the same ID, to avoid errors
+                        $(".error").text("");
+                        $(".edit-course-form .tablehead").css("text-transform","capitalize");
+                        $(".edit-course-form .tablehead").text("Edit " + callback.courseCode + " "+ callback.classDay + " Class");
+                        $(".edit-course-form #classDay").val(callback.classDay);
+                        $(".edit-course-form #classTimeStart").val(classTimeStart);
+                        $(".edit-course-form #classTimeEnd").val(classTimeEnd);
+                        $(".edit-course-form #courseCode").val(callback.courseCode);
+                        $(".edit-course-form #classVenue").val(callback.classVenue);
+                        $(".edit-course-form #cancelButton").val(callback.classId);
+                        $(".edit-course-form #saveButton").val(callback.classId);
+                        window.currentClassDay = callback.classDay;
+                        window.currentClassDayNumber = callback.currentClassDayNumber;
+
+                    }
+                },
+                error: function() {
+                  alert("Something went wrong!");
+                },
+              
+            }); 
+          });
+
+    // Submit the edited inputs to backend, receive on success and update the table
+    $("#editClassForm").on('submit',function (e){
+                var data = {
+                  classDay: $(".edit-course-form #classDay").val(),
+                  classTime: $(".edit-course-form #classTimeStart").val() +" - "+$(".edit-course-form #classTimeEnd").val(),
+                  classVenue: $(".edit-course-form #classVenue").val(),
+                  courseCode: $(".edit-course-form #courseCode").val(),
+                  classId: $(".edit-course-form #saveButton").val(),
+                  newClassDayNumber: null,
+                  status: "saveEdit",
+                }
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/timetable',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                  if(currentClassDay === callback.classDay){
+                      $(rowtoedit).closest('tr').children("#timeRow").text(callback.classTime);
+                      $(rowtoedit).closest('tr').children("#codeRow").text(callback.courseCode);
+                      $(rowtoedit).closest('tr').children("#venueRow").text(callback.classVenue);
+                      $(rowtoedit).closest('tr').children("#editButton").val(callback.classId);
+                      $(rowtoedit).closest('tr').children("#deleteButton").val(callback.classId);
+                      $(".edit-course-form").toggleClass("active");
+                      $(".options-menu").removeClass("active");
+                      }
+                      if(callback.classDay != currentClassDay){
+                        if(callback.newClassDayNumber == 0){
+                            $(".table tbody #" + callback.classDay).append(
+                                  '<td scope="row" id="timeRow">'+callback.classTime+'</td>'+
+                                  '<td scope="row" class="wrap-this" id="codeRow">'+callback.courseCode+'</td>'+
+                                  '<td scope="row" class="wrap-this" id="venueRow">'+callback.classVenue+'</td>'+
+                                  '<td scope="row" id="optionsRow">'+
+                                      '<div class="options-hamburger">'+
+                                      '<div class="oh-linewrapper">'+
+                                      '<div class="dot"></div>'+
+                                      '<div class="dot"></div>'+
+                                      '<div class="dot"></div>'+
+                                      '</div>'+
+                                          '<div class="options-menu">'+
+                                              '<ul>'+
+                                              '<li>'+
+                                                  '<a href="#editClassForm"><button value="'+callback.classId+'" type="submit" id="editButton" name="edit">Edit</button></a>'+
+                                                  '<button id="deleteButton" type="submit" value="'+callback.classId+'" id="deleteButton" name="delete">&#10008</button>'+
+                                              '</li>'+
+                                          '</ul>'+
+                                          '</div>'+
+                                      '</div>'+
+                                  '</td>'
+                              );
+                              if(currentClassDayNumber <= 1){
+                              $(rowtoedit).closest('tr').children("#timeRow, #codeRow, #venueRow, #optionsRow").remove();  
+                              }
+                              if(currentClassDayNumber > 1){
+                                total = parseInt(currentClassDayNumber) - parseInt(1);
+                                $("#"+currentClassDay+ " .side-header").attr("rowspan", total);
+                                $(rowtoedit).closest('tr').remove();
+                              }
+                            }
+                        if(callback.newClassDayNumber >= 1){
+                              $(".table tbody #" + callback.classDay).closest("tr").after(
+                                  '<tr id="'+callback.classDay+'Cont">'+
+                                  '<td scope="row" id="timeRow">'+callback.classTime+'</td>'+
+                                  '<td scope="row" class="wrap-this" id="codeRow">'+callback.courseCode+'</td>'+
+                                  '<td scope="row" class="wrap-this" id="venueRow">'+callback.classVenue+'</td>'+
+                                  '<td scope="row" id="optionsRow">'+
+                                      '<div class="options-hamburger">'+
+                                      '<div class="oh-linewrapper">'+
+                                      '<div class="dot"></div>'+
+                                      '<div class="dot"></div>'+
+                                      '<div class="dot"></div>'+
+                                      '</div>'+
+                                          '<div class="options-menu">'+
+                                              '<ul>'+
+                                              '<li>'+
+                                                  '<a href="editClassForm"><button value="'+callback.classId+'" type="submit" id="editButton" name="edit">Edit</button></a>'+
+                                                  '<button id="deleteButton" type="submit" value="'+callback.classId+'" id="deleteButton" name="delete">&#10008</button>'+
+                                              '</li>'+
+                                          '</ul>'+
+                                          '</div>'+
+                                      '</div>'+
+                                  '</td>'+
+                                  '</tr>'
+                              );
+                              if(currentClassDayNumber <= 1){
+                              $(rowtoedit).closest('tr').children("#timeRow, #codeRow, #venueRow, #optionsRow").remove();  
+                              }
+                              if(currentClassDayNumber > 1){
+                                total = parseInt(currentClassDayNumber) - parseInt(1);
+                                
+                                $("#"+currentClassDay+ " .side-header").attr("rowspan", total);
+                                $(rowtoedit).closest('tr').remove();
+                              }
+                              newTotal = parseInt(callback.newClassDayNumber) + parseInt(1);
+                              $("#"+callback.classDay+ " .side-header").attr("rowspan", newTotal);
+                              }
+                      }
+                      $(".edit-course-form").removeClass("active");
+                      $(".options-menu").removeClass("active");  
+                    },
+                    error: function() {
+                      $(".error").text("Something went wrong!");
+                    }
+            });
+          });
+
+          // Hide the edit form because the user doesn't wish to edit any longer
+          $(document).on("click", "#cancelButton",function(e){
+            e.preventDefault(); 
+            $(".edit-course-form").removeClass("active");
+            $(".options-menu").removeClass("active");
+            $(".error").text("");
+            $(".edit-course-form .tablehead").text("");
+            $(".edit-course-form #classDay").val("");
+            $(".edit-course-form #classTimeStart").val("");
+            $(".edit-course-form #classTimeEnd").val("");
+            $(".edit-course-form #courseCode").val("");
+            $(".edit-course-form #classVenue").val("");
+            $(".edit-course-form #cancelButton").val("");
+            $(".edit-course-form #saveButton").val("");
+          });
+
+          // Delete an assessment using ajax post request
+        $("table").on("click", "#deleteButton", function(e) {
+          if(confirm("Are you sure you want to delete the class?") == true){
+        var classId = $(this).val();
+        var classDay = $(this).closest("tr").attr("id");
+        var hide = $(this);
+        var data = {classId: classId, classDay:classDay, classDayNumber:null, status: "Delete"}
+        $.ajax({
+                type: 'POST',
+                url: '/timetable',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if(callback.status === "DONE"){
+                        if(callback.classDayNumber == 0){
+                           $(hide).closest('tr').children("#timeRow, #codeRow, #venueRow, #optionsRow").remove();  
+                        }
+                        if(callback.classDayNumber >= 1){
+                        $("#"+callback.classDay+ " .side-header").attr("rowspan", callback.classDayNumber);
+                        $(hide).closest('tr').remove();
+                        }
+                    }
+                },
+                error: function() {
+                  alert("Something went wrong!");
+                }
+            });
+      }
+        }); 
+      });
+            
+</script>
+
+{% endblock %}

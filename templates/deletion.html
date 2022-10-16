@@ -1,0 +1,264 @@
+{% extends "layout.html" %}
+{% block title %}
+Delete en Masse
+{% endblock %} 
+
+{% block main %}
+<div class="deletion-container">
+    <div class="upper-block">
+        <div class="rectangle" id="upOne"><p>Delete All Courses ({{count.courseCount}})</p></div>
+        <div class="rectangle" id="upTwo"><p>Delete All Outlines ({{count.outlineCount}})</p></div>
+        <div class="rectangle" id="upThree"><p>Delete All Classes ({{count.classCount}})</p></div>
+        <div class="rectangle-with-split" id="upFour">
+            <div class="rectangle-split" id="upFourFirst"><p>Delete All Academic Tasks ({{count.academicCount}})</p></div>
+            <div class="rectangle-divider-up"></div>
+            <div class="rectangle-split" id="upFourSecond"><p>Delete All Non-Academic Tasks ({{count.nonAcademicCount}})</p></div>
+        </div>
+    </div>
+    <div class="lower-block">
+        <div class="rectangle" id="lowOne"><p>Delete All Tasks ({{count.taskCount}})</div>
+        <div class="rectangle-with-split" id="lowTwo">
+            <div class="rectangle-split" id="lowTwoFirst"><p>Delete All Mid-Semesters ({{count.midSemesterCount}})</p></div>
+            <div class="rectangle-divider-down"></div>
+            <div class="rectangle-split" id="lowTwoSecond"><p>Delete All Examinations ({{count.examCount}})</p></div>
+        </div>
+        <div class="rectangle" id="lowThree"><p>Delete All Assessments ({{count.assessmentCount}})</p></div>
+        <div class="rectangle" id="lowFour"><p>DELETE EVERYTHING</p></div>
+    </div>
+    <div class="deleted-message">
+        <p>Everything is gone!  <br> <br> <a href="/home">Return to Home Page.</a> </p>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $("#upOne").click(function(e){
+        if(confirm("Are you sure you want to delete all your courses, it's outline, tasks and assessments?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {
+                  status: "deleteCourses",
+                }
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $("#upOne p").text("Delete All Courses (0)");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    $("#upTwo").click(function(e){
+        if(confirm("Are you sure you want to delete all your outlines?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deleteOutlines"}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $("#upTwo p").text("Delete All Outlines (0)");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    $("#upThree").click(function(e){
+        if(confirm("Are you sure you want to delete all your classes?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deleteClasses",}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $("#upThree p").text("Delete All Classes (0)");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    $("#upFourFirst").click(function(e){
+        if(confirm("Are you sure you want to delete all your academic tasks?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deleteAcademicTasks",}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $("#upFourFirst p").text("Delete All Academic Tasks (0)");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    $("#upFourSecond").click(function(e){
+        if(confirm("Are you sure you want to delete all your non academic tasks?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deleteNonAcademicTasks",}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $("#upFourSecond p").text("Delete All Non-Academic Tasks (0)");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    $("#lowOne").click(function(e){
+        if(confirm("Are you sure you want to delete all your tasks?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deleteTasks",}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $("#lowOne p").text("Delete All Tasks (0)");
+                    $("#upFourFirst p").text("Delete All Academic Tasks (0)");
+                    $("#upFourSecond p").text("Delete All Non-Academic Tasks (0)");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    $("#lowTwoFirst").click(function(e){
+        if(confirm("Are you sure you want to delete all your mid-semesters?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deleteMidSemesters",}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $("#lowTwoFirst p").text("Delete All Mid-Semesters (0)");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    $("#lowTwoSecond").click(function(e){
+        if(confirm("Are you sure you want to delete all your examinations?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deleteExams",}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $("#lowTwoSecond p").text("Delete All Examinations (0)");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    $("#lowThree").click(function(e){
+        if(confirm("Are you sure you want to delete all your assessments?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deleteAssessments",}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $("#lowThree p").text("Delete All Assessments (0)");
+                    $("#lowTwoFirst p").text("Delete All Mid-Semesters (0)");
+                    $("#lowTwoSecond p").text("Delete All Examinations (0)");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    $("#lowFour").click(function(e){
+        if(confirm("Are you sure you want to delete everything?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deleteEverything",}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deletion',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    $(".upper-block, .lower-block").toggleClass("hide");
+                    $(".deleted-message").toggleClass("active");
+                    alert(callback.status);
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+</script>
+{% endblock %}
+
+

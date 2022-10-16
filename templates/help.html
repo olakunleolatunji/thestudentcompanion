@@ -1,0 +1,516 @@
+{% extends "layout.html" %}
+
+{% block title %}
+TSC: Help
+{% endblock %} 
+
+{% block main %}
+<header>
+    <a href="/" class="logo"><img src="../static/books.png" alt="TSC"> TheStudentCompanion</a>
+    
+    <div class="hamburger">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <nav class="navbar">
+        
+        {% if session.user_id %}
+        {% if not deactivated %}
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="#" id="courseNav">Courses&#x25BC</a>
+                <ul class="courseList">
+                    <li><a href="/courses">Courses</a></li>
+                    <li><a href="/outlines">Course Outlines</a></li>
+                </ul>
+            </li>
+            <li><a href="/timetable">Timetable</a></li>
+            <li><a href="/todo">ToDo</a>
+            </li>
+            <li><a href="/exams">Exams</a></li>
+            <li><a href="#" id="userNav">User&#x25BC</a>
+                <ul class="userList">
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/deletion">Mass Deletion</a></li>
+                    <li><hr class="navbar-divider-solid"></li>
+                    <li><a href="/logout">Log out</a></li>
+                </ul>
+            </li>
+            <li><a href="/help">Help?</a></li>
+        </ul>
+        {% endif %}
+        {% else %}
+        <ul>
+          <li><a href="/login">Log in</a></li>
+          <li><a href="/register">Register</a></li>
+          <li><a href="/help">Help?</a></li>
+        </ul>
+        {% endif %}
+        {% if deactivated %}
+        <ul>
+            <li><a href="/login">Log in</a></li>
+            <li><a href="/register">Register</a></li>
+            <li><a href="/help">Help?</a></li>
+        </ul>
+        {% endif %}
+
+    </nav>
+</header>
+    <div class="help-container">
+        <div class="help-toptext">
+            <div class="flexwrap">
+            <h2>Here to Help!</h2>
+            <hr>
+            <p>I made this page in case there are bugs in the code or anything isn't clear on using the student companion.</p>
+            </div>
+        </div> 
+        <br>
+        <div class="help">
+            <p class="help-mediumtext"> <strong>CONTENTS</strong> <br> <a href="#helpErrors">Error Messages</a> &#8226 
+                                        <a href="#helpRegister">Register</a> &#8226 <a href="#helpLogin">Log In</a> &#8226 <a href="#helpLogout">Log Out</a> &#8226 
+                                        <a href="#helpAbout">About</a> &#8226 <a href="#helpNavigationBar">Navigation Bar</a> &#8226 <a href="#helpHome">Home</a> &#8226 
+                                        <a href="#helpCourses">Courses</a> &#8226 <a href="#helpCoursesAddEditDelete">Courses: Operations</a> &#8226 
+                                        <a href="#helpOutline">Outlines</a> &#8226 <a href="#helpOutlineAddEditDelete">Outlines: Operations</a> &#8226 
+                                        <a href="#helpTimetable">Timetable</a> &#8226 <a href="#helpClassAddEditDelete">Timetable: Operations</a> &#8226 
+                                        <a href="#helpTodo">To-Do</a> &#8226 <a href="#helpTaskAddEditDelete">To-Do: Operations</a> &#8226 
+                                        <a href="#helpExams">Assessments</a> &#8226 <a href="#helpExamAddEditDelete">Assessments: Operations</a> &#8226 
+                                        <a href="#helpDeletion">Deletion</a> &#8226 <a href="#helpProfile">Profile</a> &#8226 <a href="#helpUpdateProfile">Update Profile</a> &#8226 
+                                        <a href="#helpChangePassword">Change Password</a> &#8226 <a href="#helpTheme">Theme</a> &#8226 <a href="#helpDeactivation">Deactivation</a> &#8226
+                                        {% if session.user_id %}<a href="#helpForms">Send Feedback or Report A Bug</a> &#8226 {% endif %}<a href="#contactTheDeveloper">Contact the Developer</a>
+            </p>
+        </div>
+        <br>
+        <div id="helpErrors" class="help">
+            <br>
+            <p class="help-bigtext">Error Messages</p>
+            <br>
+            <p class="help-mediumtext">Error messages are either specific about the issue or "Something went wrong!". When an error message 
+                                        shows up as text on the screen, clicking on it will take you to the part of the help page that can 
+                                        be of assistance. 
+            </p>
+            <br>
+            <p class="help-smalltext">When an error message pops up as a screen alert, please <a href="#contactTheDeveloper">contact the developer</a> stating what led to it.</p>
+        </div>
+        <br>
+        <div id="helpRegister" class="help">
+            <br>
+            <p class="help-bigtext">Registering</p>
+            <br>
+            <p class="help-mediumtext">Usernames must be 1-25 characters long, alphabets and digits are allowed. 
+                                        Special characters: "-" "_" "." are also allowed but you may not start your username 
+                                        with special characters or have them come one after the other in your username, 
+                                        you may end the username with a special character. <br> Your CGPA is to be inputed as a number (decimals are allowed). <br>
+                                        Passwords must be 8 or more characters long, including at least one digit.
+            </p>
+            <br>
+            <p class="help-smalltext">Character limits: Fullname(70), Username(25), School(50), Major(100), StudentID(30). <br> Click on login if you have already registered to take you to the login page.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/5675ec37a78782ac50222e97a7b931f2/f1de7285c7caedcc-a4/s2048x3072/f21676a4fcbc275522254f77566dd03b5d2696b0.pnj" alt="Registration page">
+        </div>
+        <br>
+        <div id="helpLogin" class="help">
+            <br>
+            <p class="help-bigtext">Logging In</p>
+            <br>
+            <p class="help-mediumtext">TSC is case insensitive, so your username doesn't have to be inputted the exact
+                                        way you registered for the log in to work. <br>
+                                        We take care of whitespaces for you but try not to include them in your username. Whitespaces: "Obafemi   ". No Whitespace: "Obafemi".
+            </p>
+            <br>
+            <p class="help-smalltext">Click on register or sign up if you don't have an account already.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/ce398574eed3ef538562f75dfab7d9f6/f1de7285c7caedcc-d9/s2048x3072/75135b83a660f2be2756288a0d81fc9431b37c52.pnj" alt="Log in page">
+        </div>
+        <br>
+        <div id="helpLogout" class="help">
+            <br>
+            <p class="help-bigtext">Logging Out</p>
+            <br>
+            <p class="help-mediumtext">To log out, open the User dropdown on the navigation bar and click on log out.</p>
+            <br>
+            <p class="help-smalltext">For mobile view, you need to tap on the hamburger to get the navigation bar to show.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/b5b3bce51661f1fc0a84e4aea97d0406/f1de7285c7caedcc-ee/s1280x1920/beeff088db8554935b6bbe02a4eeb4a6fa5cc7ed.jpg" alt="Log out page">
+        </div>
+        <br>
+        <div id="helpAbout" class="help">
+            <br>
+            <p class="help-bigtext">Accessing About TSC</p>
+            <br>
+            <p class="help-mediumtext">To access the carousel, click on <img style="height:15px;width:15px;" src="../static/books.png" alt="TSC">TheStudentCompanion on the left side of the navigation bar</p>
+            <br>
+            <p class="help-smalltext">Then scroll down to get the carousel (slideshow). On the last slide, there's a link to register or the hlep page, depending on if the user is logged in or not.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/d34bdc320e8601e403d759fabe789e52/f1de7285c7caedcc-3a/s1280x1920/b9d825f34593c646a700f8b1b5e2a134b0908c3c.jpg" alt="About TSC page">
+        </div>
+        <br>
+        <div id="helpNavigationBar" class="help">
+            <br>
+            <p class="help-bigtext">The Navigation Bar</p>
+            <br>
+            <p class="help-mediumtext">To open the dropdowns, click on the elements with downward arrows next to them.
+                                        The current page will have a different look to the others on the navigation bar, just to keep extra track of where you are.
+            </p>
+            <br>
+            <p class="help-smalltext">For desktop users, there's a hover effect on the elements. To achieve his hover on modile, hold down on the element but don't tap on it.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/11a58f1341d227e0292581e1a2cc2f4c/f1de7285c7caedcc-0d/s1280x1920/8c22a222aba1506a5989d11b8ff478d7712bfa65.jpg" alt="Navigation Bar">
+        </div>
+        <br>
+        <div id="helpHome" class="help">
+            <br>
+            <p class="help-bigtext">Home</p>
+            <br>
+            <p class="help-mediumtext">The home page displays classes for that day, all tasks with an urgent statu and the next three assessments.
+                                        <br> The home page has three active links. Clicking on: "Classes Today" will take you to your timetable. || "Urgent Tasks" will take you to your todo list. 
+                                        || "Upcoming Assessments" will take you to your assessments.
+            </p>
+            <br>
+            <p class="help-smalltext"></p>
+            <br>
+            <img src="https://64.media.tumblr.com/c9fde9bc9548b006de61376d8ed81ac0/f1de7285c7caedcc-f3/s1280x1920/4c40bf6a9435966f58c3036ed5b92deaf1f2292e.jpg" alt="Home page">
+        </div>
+        <br>
+        <div id="helpCourses" class="help">
+            <br>
+            <p class="help-bigtext">Courses</p>
+            <br>
+            <p class="help-mediumtext">Clicking on Red Circles: "Course Code" will take you to the outline page with no outline open. ||
+                                        "Course" will take you to your ToDo page. || "Units" will take you to the assessment page. 
+                                        || "&#9998" will take you to your timetable. <br>
+                                        Clicking on Purple Circles: These perform the same function, the difference is the specificity. They take you to the 
+                                        same pages but with information on the particular course that was clicked on through its code, name or units.
+            </p>
+            <br>
+            <p class="help-smalltext">Two courses may not have the same course code.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/c80a715e4cdcf4ab1d9c19ee8333aa4b/f1de7285c7caedcc-3a/s1280x1920/09e096184f8880240aafdcf8544b74edbefdeac5.jpg" alt="Courses page">
+        </div>
+        <br>
+        <div id="helpCoursesAddEditDelete" class="help">
+            <br>
+            <p class="help-bigtext">Courses: Add, Edit and Delete</p>
+            <br>
+            <p class="help-mediumtext">To add a new course, click on the "Add a New Course" button which turns into a cancel button after it is clicked
+                                        (as seen in the picture). If you no longer wish to add a new course, simply click on cancel. <br> To edit a course, click
+                                        on the meatballs menu on its row to reveal the edit and delete buttons, then click on whichever one you wish to do.
+            </p>
+            <p class="help-smalltext">Character limits: Course Name(200), Course Code(15).</p>
+            <br>
+            <img src="https://64.media.tumblr.com/d52bb6badd037236b3710a3d457af5f4/ed28ccbd90402c91-68/s2048x3072/93bfc2146ef64cdcc7a64a04f974eab6fd13d709.pnj" alt="Courses: Add">
+            <img src="https://64.media.tumblr.com/5a1e8ffc5d8933a67297a3b00a718d14/ed28ccbd90402c91-3e/s2048x3072/0d177a9466696b7ff76ec3b30961eaf86f8362d4.pnj" alt="Courses: Edit and Delete">
+        </div>
+        <br>
+        <div id="helpOutline" class="help">
+            <br>
+            <p class="help-bigtext">Course Outlines</p>
+            <br>
+            <p class="help-mediumtext">You can either access a course's outline through the courses page or by selecting from the Course Code menu (top left)
+                                        and clicking on "Check Outline". Topics can have three statuses: "Done", "Undone" or "Urgent". That's left to the user.
+            </p>
+            <br>
+            <p class="help-smalltext">Topics are arranged in order of the weeks. From earliest to latest.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/caf610e96b05a475033d95fa2625cb6a/f1de7285c7caedcc-de/s2048x3072/06c2b0ee5e4ede1acd47d5c419f0a25c11552846.pnj" alt="Outline page unselected">
+            <img src="https://64.media.tumblr.com/422e3af2c9dc35de9b9e4026677436ad/f1de7285c7caedcc-73/s2048x3072/391cfca003c207f80f99db0c3b71fce726ecb756.pnj" alt="Outline page selected">
+        </div>
+        <br>
+        <div id="helpOutlineAddEditDelete" class="help">
+            <br>
+            <p class="help-bigtext">Outlines: Add, Status, Edit and Delete</p>
+            <br>
+            <p class="help-mediumtext">To add a topic to an outline, the course outline has to be open. After opening the outline, click on the "Add a new topic" button 
+                                    (it turns to a cancel button after it is clicked). <br> To change the status of a topic, click on the status button. <br> To edit or delete a topic,
+                                    click on the meatballs menu to show to edit and delete(&#10008) buttons. <br> To delete the entire course outline, click on the delete button at the top right side of the screen.
+            </p>
+            <p class="help-smalltext">Character limits: Topic(200), Topic Details(400). The status button is "Undone" by default, it goes from Undone -> Urgent -> Done -> Undone.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/a3e2d43ce491d8bfc7727c28553c7094/ed28ccbd90402c91-22/s2048x3072/6b3339afa956dda505c69379b74342eed7827319.pnj" alt="Outlines: Add">
+            <img src="https://64.media.tumblr.com/f24684fd467c8ca089f9c23200949198/ed28ccbd90402c91-7b/s2048x3072/1cc890db7ff368a4535bc7419a0aeb41f1398bb2.pnj" alt="Outlines: Status, Edit and Delete">
+        </div>
+        <br>
+        <div id="helpTimetable" class="help">
+            <br>
+            <p class="help-bigtext">Timetable</p>
+            <br>
+            <p class="help-mediumtext">This simply displays your class schedule.</p>
+            <br>
+            <p class="help-smalltext">No measures have been put in place to ensure that the classes end before they start
+                                        according to user input. If the user's class ends before it starts, that's fine by us :)
+            </p>
+            <br>
+            <img src="https://64.media.tumblr.com/3bd6f01bc463c401e785af272bf73db5/f1de7285c7caedcc-e1/s2048x3072/e13f7666e2560fb59fd9c58e8a1b1b9ace6dbfcc.pnj" alt="Timetable page">
+        </div>
+        <br>
+        <div id="helpClassAddEditDelete" class="help">
+            <br>
+            <p class="help-bigtext">Timetable: Add, Edit and Delete</p>
+            <br>
+            <p class="help-mediumtext">To add a new class, click on the "Add a new class" button (which turns into a cancel button after it is clicked).
+                                    <br> To edit a class, click on the meatballs menu to show the edit and delete(&#10008) buttons.
+            </p>
+            <p class="help-smalltext">Character limits: Venue(30).</p>
+            <br>
+            <img src="https://64.media.tumblr.com/b77a00d1bba9accbe039fa3054f0e7fb/ed28ccbd90402c91-b2/s2048x3072/6b6e2b2c3443aae82b3a8e5277d976fd3d4a069c.pnj" alt="Timetable: Add">
+            <img src="https://64.media.tumblr.com/fb800962bc05582e2f2fffdd7243d299/ed28ccbd90402c91-d6/s2048x3072/50f93d0b7ed69a3847f19c9fb40920deca7ea248.pnj" alt="Timetable: Edit and Delete">
+        </div>
+        <br>
+        <div id="helpTodo" class="help">
+            <br>
+            <p class="help-bigtext">To-Do</p>
+            <br>
+            <p class="help-mediumtext">The to-do list comes with a filter, you can choose to see all tasks, 
+                                        the academic tasks or the non-academic tasks.<br> 
+                                        The to-do list has three status options as well: Undone, Done and Urgent.
+            </p>
+            <br>
+            <p class="help-smalltext">Filtered views come with filtered options to add. You can't add a non-academic task while in the academic task filtered view and vice versa.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/b8168fdcf3c1e7b0e9078d002beb4c9a/8112d1621c21424d-4b/s1280x1920/5ca5437899a5680c7b4167fbb609d09667f0086d.jpg" alt="Todo page">
+        </div>
+        <br>
+        <div id="helpTaskAddEditDelete" class="help">
+            <br>
+            <p class="help-bigtext">To-Do: Add, Status, Edit and Delete</p>
+            <br>
+            <p class="help-mediumtext">To add a new task, click on the "Add a new ..." button for either academic or non-academic tasks. (The buttons
+                                        become cancel buttons after they are clicked). <br> To change the status of a task, click on the status button. <br> To edit or delete
+                                        a task, click on the meatballs menu to show the edit and delete(&#10008) buttons.
+            </p>
+            <p class="help-smalltext">Character Limits: Task(300). The status button is "Undone" by default, it goes from Undone -> Urgent -> Done -> Undone.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/f548d35256f155ba4f525fb01a6ae70b/ed28ccbd90402c91-c9/s2048x3072/0ba9de440379833d27bdafff8267a98b9ad902a4.pnj" alt="To-Do: Add">
+            <img src="https://64.media.tumblr.com/e06502b4adbabeb1bc3f51d6a402cda5/ed28ccbd90402c91-f8/s2048x3072/2f608db33ea4dd1857939fdac9b46307da47f3a0.pnj" alt="To-Do: Status, Edit and Delete">
+        </div>
+        <br>
+        <div id="helpExams" class="help">
+            <br>
+            <p class="help-bigtext">Assessments</p>
+            <br>
+            <p class="help-mediumtext">The assessments page also comes with a filter for mid-semester and exams(finals) but it only has two status options:
+                                        Done and Undone. 
+            </p>
+            <p class="help-smalltext">In the brackets, (MS) means Mid-Semester and (E) means Examination.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/f3bc42cf911971c04a0a79dbd733d849/8112d1621c21424d-a5/s1280x1920/21840be85e5c00e35300ec6f4d075b657f4148de.jpg" alt="Exam page">
+        </div>
+        <br>
+        <div id="helpExamAddEditDelete" class="help">
+            <br>
+            <p class="help-bigtext">Assessment: Add, Status, Edit and Delete</p>
+            <br>
+            <p class="help-mediumtext">To add a new assessment, click on the "Add a new ..." button for either mid-semesters or exams. (The buttons
+                                        become cancel buttons after they are clicked). <br> To change the status of an assessment, click on the status button. <br> To edit or delete
+                                        an assessment, click on the meatballs menu to show the edit and delete(&#10008) buttons.</p>
+            <p class="help-smalltext">Character limits: Venue(50). The status button is "Undone" by default, it goes from Undone -> Done  -> Undone.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/1997a4550a4487eb9a26fec9d796735f/ed28ccbd90402c91-67/s2048x3072/4e8a4386ca0b1ecf94ef902b884793d5daab8342.pnj" alt="Assessment: Add">
+            <img src="https://64.media.tumblr.com/8380a3a16f7d2f64a0f42c647161f589/ed28ccbd90402c91-d1/s2048x3072/4634378e704931e899f492ea42cfddd556be808c.pnj" alt="Assessment: Status, Edit and Delete">
+        </div>
+        <br>
+        <div id="helpDeletion" class="help">
+            <br>
+            <p class="help-bigtext">Deleting Multiple</p>
+            <br>
+            <p class="help-mediumtext">To access the deletion page, open the user dropdown and click on "Mass Deletion". <br> The mass deletion page allows you to delete multiple entries at once. This would most likely come in handy at the end of semesters or session.</p>
+            <p class="help-smalltext">If you choose to delete everything. Clicking on "Return to Home Page" will send you back to the home page.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/58bbafb5b6c8e2706b986bef1b805074/8112d1621c21424d-8a/s1280x1920/80542b4dababe69ee835e021a622478b882f0401.jpg" alt="Deletion page">
+            <img src="https://64.media.tumblr.com/cc5276c3521f47f8b94718347de982e6/8112d1621c21424d-61/s1280x1920/e1e1b91e83e0258e002b3a08fd7766e03c5ebee4.jpg" alt="Delete everything aftermath">
+        </div>
+        <br>
+        <div id="helpProfile" class="help">
+            <br>
+            <p class="help-bigtext">Profile</p>
+            <br>
+            <p class="help-mediumtext">To view your profile, open the User dropdown and click on profile.</p>
+            <p class="help-smalltext">From inside the profile page, you can update your profile, change your password, 
+                                        change the theme of your account and deactivate your account.
+            </p>
+            <br>
+            <img src="https://64.media.tumblr.com/a5bb016d3a237686fb47f34c5b1fed77/8112d1621c21424d-15/s1280x1920/c21e5917a7738104ea00a177aa3d62ece109d981.jpg" alt="Profile page">
+        </div>
+        <br>
+        <div id="helpUpdateProfile" class="help">
+            <br>
+            <p class="help-bigtext">Update your Profile</p>
+            <br>
+            <p class="help-mediumtext">To update your profile, first open the profile page then 
+                                    click on update profile. To submit, click on update.
+            </p>
+            <p class="help-smalltext">Character limits: Fullname(70), Username(25), School(50), Major(100), StudentID(30). <br> 
+                                    The constraints in updating your profile are the same as those in registering your account.
+            </p>
+            <br>
+            <img src="https://64.media.tumblr.com/7efdd1da438542a02d1f51dc48b9d926/8112d1621c21424d-a0/s1280x1920/dd366df243d850f1d186a63938851147d0d92229.jpg" alt="Update Profile">
+        </div>
+        <br>
+        <div id="helpChangePassword" class="help">
+            <br>
+            <p class="help-bigtext">Change your password</p>
+            <br>
+            <p class="help-mediumtext">To change your password, first, open the profile page. Then click on Change Password.</p>
+            <p class="help-smalltext">The old password is required for this to work.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/e8a6a019e76faf12c33498ea43f22297/8112d1621c21424d-60/s1280x1920/e7ffc295b57046f9c555e16a3d81eb2de4cbbf35.jpg" alt="Change password ">
+        </div>
+        <br>
+        <div id="helpTheme" class="help">
+            <br>
+            <p class="help-bigtext">Theme</p>
+            <br>
+            <p class="help-mediumtext">To change your theme, open the user dropdown, access to profile page. Then click on "Theme"
+                                        and select whatever palette you want.
+            </p>
+            <p class="help-smalltext">You have 10 theme options to pick from.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/05f6c822801c793adef286833f20fed1/8112d1621c21424d-ff/s1280x1920/12e7b44be4cddf88605dc22abf4a404346d8492a.jpg" alt="Theme">
+        </div>
+        <br>
+        <div id="helpDeactivation" class="help">
+            <br>
+            <p class="help-bigtext">Deactivating your account.</p>
+            <br>
+            <p class="help-mediumtext">From your profile page, you can deactivate your account. Deactivation here works manually. After deactivating, you have the option to
+                                        reactivate or permanently delete your account. <br>
+                                        To do this, log in after deactivating and you will be directed to the deactivation screen where
+                                        you can make your choice by clciking on either side of the screen.
+            </p>
+            <p class="help-smalltext">Permanently deleting your account also deletes all of your account's information.</p>
+            <br>
+            <img src="https://64.media.tumblr.com/7967f35a8c3faa76010068cf17f5f887/8112d1621c21424d-78/s1280x1920/0c320c1d1cf5da4b572ccefe932b1cb17e7cc637.jpg" alt="Deactivation page">
+            <img src="https://64.media.tumblr.com/78405d96b1a4dae597c187e718abb05b/8112d1621c21424d-22/s2048x3072/25ccf5e98c5b6b17d5a7f0a92aebad6a4d7a3318.pnj" alt="Deactivated page">
+        </div>
+        {% if session.user_id %}
+        <br>
+        <div id="helpForms" class="help">
+            <br>
+            <div class="help-form-mega-split">
+                <div class="help-form-split">
+                    <div class="help-form-side" id="sendFeedback"><p class="help-bigtext">Send Feedback</p></div>
+                    <div class="help-form-side" id="reportBug"><p class="help-bigtext">Report A Bug</p></div>
+                </div>
+            </div>
+            <br>
+            <form class="new-at-form help-form bug" id="reportBugForm">
+                <div class="input-wrapper">
+                  <h3 class="tablehead">Report a bug</h3>
+                    <div class="input-box">
+                      <label for="bugPage">On what page did the bug occur?</label>
+                        <input autocomplete="off" class="form-control" id="bugPage" name="bugPage" placeholder="e.g courses page (30 characters max)" type="text" maxlength="30" required>
+                    </div>
+                    <div class="input-box">
+                        <label for="bugDetails">Details of the bug</label> 
+                          <textarea form="reportBugForm" autocomplete="off" class="form-control" id="bugDetails" name="bugDetails" placeholder="Describe the bug (500 characters max)" type="text" maxlength="500" required></textarea>
+                      </div>
+                    <div class="error"></div>
+                    <button class="add-course-button" value="A" id="reportBugButton" name="reportBugButton" type="submit">Report the Bug</button>
+                  </div>
+              </form>
+              <form class="new-at-form help-form feedback" id="feedbackForm">
+                <div class="input-wrapper">
+                  <h3 class="tablehead">Feedback</h3>
+                    <div class="input-box">
+                      <label for="feedbackType">Feedback Type</label>
+                        <select autofocus class="form-control" id="feedbackType" name="feedbackType" type="text" required>
+                        <option disabled selected value>Select Feedback Type</option>
+                        <option value="question">Question</option>
+                        <option value="comment">Comment</option>
+                        <option value="suggestion">Suggestion</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="feedbackDetails">Feedback details</label>
+                        <textarea form="feedbackForm" autocomplete="off" class="form-control" id="feedbackDetails" name="feedbackDetails" placeholder="Details of your feedback (500 characters max)" type="text" maxlength="500" required></textarea>
+                     </div>
+                      <div class="error"></div>
+                      <button class="add-course-button" value="A" id="sendFeedbackButton" name="sendFeedback" type="submit">Send Feedback</button>
+                </div>
+              </form>
+        </div>
+        {% endif %}
+        <br><br>
+        <div class="help-bottomtext" id="contactTheDeveloper">
+            <div class="flexwrap">
+            <p>Thank you for choosing TSC!</p>
+            <hr>
+            <h5>Contact the Developer</h5>
+            <h6><a href="https://github.com/olakunleolatunji">GitHub</a> | <a href="https://linkedin.com/in/olatunjiolakunle">LinkedIn</a></h6>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).on("click", "#sendFeedback", function(){
+            if($(".new-at-form.feedback").hasClass("active")){
+                $(".new-at-form.feedback").removeClass("active");
+                return;
+            }
+            $(".new-at-form.bug").removeClass("active");
+            $(".new-at-form.feedback").addClass("active");
+        });
+        $(document).on("click", "#reportBug", function(){
+            if($(".new-at-form.bug").hasClass("active")){
+                $(".new-at-form.bug").removeClass("active");
+                return;
+            }
+            $(".new-at-form.feedback").removeClass("active");
+            $(".new-at-form.bug").addClass("active");
+        });
+        // Submit new course form input and receive it after sending to backend to update database
+        $("#feedbackForm").on('submit',function(e){
+        e.preventDefault();
+                    var data = {
+                        feedbackType : $('.new-at-form #feedbackType').val(),
+                        feedbackDetails : $('.new-at-form #feedbackDetails').val(),
+                        status: "feedback"
+                    }
+                    // When the request and backend work successfully, add the new course to the table without refreshing
+                    $.ajax({
+                    type: 'POST',
+                        url: '/help',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(data),
+                        success: function(callback) {
+                        if(callback.status === "success"){
+                            alert("Received!");
+                            $("#feedbackForm").trigger('reset');
+                        }
+                        },
+                        error: function() {
+                        $(".error").text("Something went wrong! Please report this as a bug.");
+                        }
+                });
+            });
+        $("#reportBugForm").on('submit',function(e){
+            e.preventDefault();
+                var data = {
+                    bugPage : $('.new-at-form #bugPage').val(),
+                    bugDetails : $('.new-at-form #bugDetails').val(),
+                    status: "bug"
+                }
+                // When the request and backend work successfully, add the new course to the table without refreshing
+                $.ajax({
+                type: 'POST',
+                    url: '/help',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function(callback) {
+                    if(callback.status === "success"){
+                        alert("Received!");
+                        $('#reportBugForm').trigger('reset');
+                    }
+                    },
+                    error: function() {
+                    $(".error").text("Oops, please report this bug!");
+                    }
+            });
+        });
+
+    </script>
+{% endblock %}

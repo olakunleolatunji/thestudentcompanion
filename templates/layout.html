@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Student Companion: {% block title %}{% endblock %} </title>
+    <!-- <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"> -->
+    <link rel="stylesheet" href="../static/{{theme}}">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo"><img src="../static/books.png" alt="TSC"> TheStudentCompanion</a>
+        
+        <div class="hamburger">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+
+        <nav class="navbar">
+            
+            {% if session.user_id %}
+            {% if not deactivated %}
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="#" id="courseNav">Courses&#x25BC</a>
+                    <ul class="courseList">
+                        <li><a href="/courses">Courses</a></li>
+                        <li><a href="/outlines">Course Outlines</a></li>
+                    </ul>
+                </li>
+                <li><a href="/timetable">Timetable</a></li>
+                <li><a href="/todo">ToDo</a></li>
+                <li><a href="/exams">Exams</a></li>
+                <li><a href="#" id="userNav">User&#x25BC</a>
+                    <ul class="userList">
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/deletion">Mass Deletion</a></li>
+                        <li><hr class="navbar-divider-solid"></li>
+                        <li><a href="/logout">Log out</a></li>
+                    </ul>
+                </li>
+                <li><a href="/help">Help?</a></li></ul>
+            {% endif %}
+            {% else %}
+            <ul>
+              <li><a href="/login">Log in</a></li>
+              <li><a href="/register">Register</a></li>
+              <li><a href="/help">Help?</a></li>
+            </ul>
+            {% endif %}
+            {% if deactivated %}
+            <ul>
+                <li><a href="/login">Log in</a></li>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/help">Help?</a></li>
+              </ul>
+            {% endif %}
+
+        </nav>
+    </header>
+
+    <hr class="navbar-divider-solid">
+
+    <main>
+        {% block main %}{% endblock %}
+        <div class="backdrop-filter"></div>
+        <div class="backdrop-filter-wide"></div>
+    </main>
+
+    <footer id="footer">
+        Stay in school kids! 
+    </footer>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+            $('a').each(function(e){
+                // e.preventDefault(); 
+                if ($(this).prop('href') === window.location.href) {
+                    $(this).addClass('active-window-a'); 
+                    var currentLocation = window.location.href;
+                    if(currentLocation.includes("outlines") || currentLocation.includes("courses")){
+                        $("#courseNav").addClass('active-window-a');
+                    }
+                    if(currentLocation.includes("profile") || currentLocation.includes("deletion")){
+                        $("#userNav").addClass('active-window-a');
+                    }
+                }
+            });
+        });
+        $(".hamburger").click(function(e) {
+            e.preventDefault();
+
+            $(".navbar").toggleClass("active");
+            if($(".backdrop-filter").hasClass("active")){
+                $(".backdrop-filter").toggleClass("active");
+                $(".backdrop-filter-wide").removeClass("active");
+                return;
+            }
+            $(".backdrop-filter").toggleClass("active");
+        });
+        $(document).on("click", ".backdrop-filter",function(e){
+            e.preventDefault();
+            $(".navbar").toggleClass("active");
+            $(".userList").removeClass("active");
+            $(".courseList").removeClass("active");
+            $(".backdrop-filter").removeClass("active");
+        });
+
+        $(document).on("click", "#courseNav",function(e){
+            $(".courseList").toggleClass("active");
+            if($(".userList").hasClass("active")){
+                $(".userList").toggleClass("active");
+                $(".backdrop-filter-wide").toggleClass("active");
+            }
+            if($(".backdrop-filter").hasClass("active")){
+                return;
+            }
+            $(".backdrop-filter-wide").toggleClass("active");
+        });
+        $(document).on("click", "#userNav",function(e){
+            $(".userList").toggleClass("active");
+            if($(".courseList").hasClass("active")){
+                $(".courseList").toggleClass("active");
+                $(".backdrop-filter-wide").toggleClass("active");
+            }
+            if($(".backdrop-filter").hasClass("active")){
+                return;
+            }
+            $(".backdrop-filter-wide").toggleClass("active");
+        }); 
+        // If backdrop wide(for larger screens) is open, but user is on mobile, then normal backdrop is open. On click, remove everything and return to normal page.
+        $(document).on("click", ".backdrop-filter-wide",function(e){
+            $(".userList").removeClass("active");
+            $(".courseList").removeClass("active");
+            $(".backdrop-filter").removeClass("active");
+            $(".backdrop-filter-wide").removeClass("active");
+            $(".navbar").removeClass("active");
+            // Added this to make the git respond to me
+        });
+        
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Student Companion: Deactivated Account </title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo"><img src="../static/books.png" alt="TSC"> TheStudentCompanion</a>
+    </header>
+
+    <hr class="navbar-divider-solid">
+
+    <main>
+        <div class="deact-container">
+            <div class="deact-header">
+                <h1>WELCOME BACK TO THE STUDENT COMPANION</h1>
+            </div>
+            <div class="deact-middle">
+                <p>This account is currently deactivated. Would you like to reactivate the account or permanently delete the account?</p>
+            </div>
+            <div class="deact-mega-split">
+                <div class="deact-split">
+                    <div class="deact-left" id="reactivate">RE-ACTIVATE</div>
+                    <div class="deact-right" id="delete">PERMANENTLY DELETE</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="footer">
+        Stay in school kids! 
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $("#reactivate").click(function(e){
+        if(confirm("Are you sure you want to reactivate your account?") == true){
+                var data = {
+                  status: "reactivate",
+                }
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: 'deactivation',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    window.location.href = "/home";
+                    alert(callback.status);
+                      },
+                    error: function() {
+                        alert("Something went wrong!")
+                    }
+            });
+        
+        }
+    });
+
+        $("#delete").click(function(e){
+        if(confirm("Are you sure you want to delete your account and all information?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {
+                  status: "deleteAccount",
+                }
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deactivation',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if(callback.status === "Deleted"){
+                        alert("Account permanently deleted!");
+                        window.location.href = "/deleted";
+                        return;
+                    }
+                    alert(callback.status);
+                    window.location.href = "/profile";
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+{% extends "layout.html" %}
+{% block title %}
+Courses
+{% endblock %} 
+
+{% block main %}
+    
+<div class="page-container">
+  <table class="table" id="coursesTable">
+    <h1 class="tablehead">Courses</h1>
+    <thead class="table-header">
+      <tr>
+        <th scope="col" class="courses-code-column"><a href="/outlines">Course Code</a></th>
+        <th scope="col" class="courses-course-column"><a href="/todo">Course</a></th>
+        <th scope="col" class="courses-units-column"><a href="/exams">Units</a></th>
+        <th scope="col" class="courses-edit-column"><a href="/timetable">&#9998</a></th>
+      </tr>
+    </thead>
+    <tbody> 
+      {% for course in courses %}
+      <tr>
+        <td scope="row" class="wrap-this" id="codeRow"><a href="{{ url_for('outlines', courseCode = course.courseCode)}}">{{ course.courseCode }}</a></td>
+        <td class="wrap-this" scope="row" id="nameRow"><a href="{{ url_for('todo', courseCode = course.courseCode)}}">{{ course.courseName }}</a></td>
+        <td scope="row" id="unitsRow"><a href="{{ url_for('exams', courseCode = course.courseCode)}}">{{ course.courseUnits }}</a></td>
+        <td scope="row" id="optionsRow">
+          <div class="options-hamburger">
+          <div class="oh-linewrapper">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+            <div class="options-menu">
+              <ul>
+                <li>
+                  <a href="#editCourseForm"><button type="submit" value="{{ course.id }}" id="editButton" name="edit">Edit</button></a>
+                  <button id="deleteButton" type="submit" value="{{ course.id }}" name="delete">Delete</button> 
+                </li>
+            </ul>
+            </div>
+        </div>
+          
+        </td>
+      </tr> 
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="new-button-div">
+    <a href="#newCourseForm"><button type="submit" class="new-course-button">Add a New Course</button></a>
+  </div>
+
+  <!-- Add A New Course -->
+  <form class="new-course-form" id="newCourseForm">
+      <div class="input-wrapper">
+        <h3>Add A New Course</h3>
+        <div class="input-box">
+            <label for="courseCode">Course Code</label>
+            <input autocomplete="off" autofocus class="form-control" id="courseCode" name="courseCode" placeholder="Enter course code" type="text" maxlength="15" required>
+        </div>
+        <div class="input-box">
+          <label for="courseName">Course</label>
+            <input autocomplete="off"  class="form-control" id="courseName" name="courseName" placeholder="Enter course name" type="text" maxlength="200" required>
+        </div>
+        <div class="input-box">
+            <label for="courseUnits">Course Units</label>
+            <input autocomplete="off" class="form-control" id="courseUnits" name="courseUnits" placeholder="Enter course units" type="number" min="1" required>
+        </div>
+        <a href="/help#helpCoursesAddEditDelete"><div class="error"></div></a>
+        <button class="add-course-button" value="add" name="add" type="submit">Add Course</button>
+      </div>
+  </form>
+  
+  <!-- Edit an Old Course -->
+  <form class="edit-course-form" id="editCourseForm">
+    <div class="input-wrapper">
+    <h3 class="tablehead"></h3>
+    <div class="input-box">
+      <label for="courseCode">Course Code</label>
+        <input autocomplete="off" id="courseCode" autofocus class="form-control" name="courseCode" placeholder="Enter course code" type="text" maxlength="15" required>
+    </div>
+    <div class="input-box">
+      <label for="courseName">Course</label>
+        <input autocomplete="off" id="courseName" class="form-control" name="courseName" placeholder="Enter course name" type="text" maxlength="200" required>
+    </div>
+    <div class="input-box">
+      <label for="courseUnits">Course Units</label>
+        <input autocomplete="off" id="courseUnits" class="form-control" name="courseUnits"  placeholder="Enter course units" type="number" min="1" required>
+    </div>
+    <br>
+    <a href="/help#helpCoursesAddEditDelete"><div class="error"></div></a>
+    <div class="input-wrapper-button-wrapper">
+    <button class="add-course-button" value="" id="cancelButton" name="cancel" type="submit">Cancel</button>
+    <button class="add-course-button" value="" id="saveButton" name="saveEdit" type="submit">Save</button>
+  </div>
+  </div>
+</form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+
+  $(document).ready(function() {
+  // Show form to add a new course
+  $(".new-course-button").click(function(){
+    if($(".new-course-button").hasClass("cancel")){
+      $(".new-course-button").removeClass("cancel");
+      $(".new-course-button").text("Add a New Course");
+      $(".new-course-form").toggleClass("active");
+      $(".edit-course-form").removeClass("active");
+      $("#newCourseForm").trigger("reset");
+      $(".error").text("");
+      return;
+    }
+    $(".new-course-form").toggleClass("active");
+      $(".edit-course-form").removeClass("active");
+      $(".new-course-button").addClass("cancel");
+      $(".new-course-button").text("Cancel");
+      $(".error").text("");
+  });
+// Show edit and delete buttons
+$(document).on("click", ".oh-linewrapper",function(e){
+  e.preventDefault();
+  var self = $(this).closest(".options-hamburger").children(".options-menu");
+  // If another options menu is open, close it first
+  if(self.hasClass("active")){
+    self.toggleClass("active");
+    return;
+  }
+  $(".options-menu").removeClass("active");
+  self.toggleClass("active"); 
+});
+
+// Submit new course form input and receive it after sending to backend to update database
+$("#newCourseForm").on('submit',function(e){
+  e.preventDefault();
+            var data = {
+                courseCode : $('.new-course-form #courseCode').val(),
+                courseName : $('.new-course-form #courseName').val(),
+                courseUnits : $('.new-course-form #courseUnits').val(),
+                courseId : null,
+                status: "add"
+            }
+            // When the request and backend work successfully, add the new course to the table without refreshing
+            $.ajax({
+            type: 'POST',
+                url: '/courses',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                  if(callback.status === "success"){
+                    $(".table tbody").append('<tr><td scope="row"><a href="/outlines?courseCode=' + callback.courseCode + '">' + callback.courseCode + '</a></td><td class="wrap-this" scope="row"><a href="/todo?courseCode=' + callback.courseCode + '">' + callback.courseName + '</a><td scope="row"><a href="/exams?courseCode=' + callback.courseCode + '">' + callback.courseUnits + '</a></td><td scope="row"><div class="options-hamburger"><div class="oh-linewrapper"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><div class="options-menu"><ul><li><a href="#editCourseForm"><button type="submit" value="'+callback.courseId+'" id="editButton" name="edit">Edit</button></a><button id="deleteButton" type="submit" value="'+callback.courseId+'" name="delete">Delete</button></li></ul></div></div></td></tr>');
+                    $("#newCourseForm").trigger('reset');
+                    $(".new-course-form").removeClass("active");
+                    $(".new-course-button").text("Add a New Course");
+                    $(".new-course-button").removeClass("cancel");
+                    $(".error").text("");
+                  }
+                  if(callback.status === "CodeTaken"){
+                    $(".error").text("Course Code is taken!");
+                  }
+                  },
+                error: function() {
+                  $(".new-course-button").text("Cancel");
+                  $(".error").text("Something went wrong!");
+                }
+        });
+      });
+// Use the value of the clicked edit button to fetch the data of that row from backend to pre-fill form for edit
+$("table").on("click", "#editButton", function(e){
+    
+    // Make sure the add form is only showing cancel when it's open
+    $(".new-course-button").removeClass("cancel");
+    $(".new-course-button").text("Add a New Course");
+    // Make sure that clicking edit on a new row will open the form straight away
+    if($(".edit-course-form").hasClass("active")){
+    $(".edit-course-form").toggleClass("active");
+    }
+    $(".new-course-form").removeClass("active");
+      $(".edit-course-form").toggleClass("active");
+      window.rowtoedit = $(this);
+      var rowId = $(this).val();
+      var data = {rowId: rowId, courseCode: null, courseName: null, courseUnits: null, status: "edit"}
+      $.ajax({
+              type: 'POST',
+              url: '/courses',
+              dataType: 'json',
+              contentType: 'application/json; charset=utf-8',
+              data: JSON.stringify(data),
+              success: function(callback) {
+                  if(callback.status === "DONE"){
+                      // Select the elements this way because the elements for the new course form have the same ID, to avoid errors
+                      $(".error").text("");
+                      $(".edit-course-form .tablehead").text("Edit " + callback.courseCode);
+                      $(".edit-course-form #courseCode").val(callback.courseCode);
+                      $(".edit-course-form #courseName").val(callback.courseName);
+                      $(".edit-course-form #courseUnits").val(callback.courseUnits);
+                      $(".edit-course-form #cancelButton").val(callback.rowId);
+                      $(".edit-course-form #saveButton").val(callback.rowId);
+                  }
+              },
+              error: function() {
+                alert("Something went wrong!");
+              },
+            
+          }); 
+        });
+        // Submit the edited inputs to backend, receive on success and update the table
+    $("#editCourseForm").on('submit',function (e){
+          var data = {
+            courseCode : $('.edit-course-form #courseCode').val(),
+            courseName : $('.edit-course-form #courseName').val(),
+            courseUnits : $('.edit-course-form #courseUnits').val(),
+            courseId : $(".edit-course-form #saveButton").val(),
+            status: "saveEdit"
+              
+          }
+          e.preventDefault();
+          $.ajax({
+          type: 'POST',
+          url: '/courses',
+          dataType: 'json',
+          contentType: 'application/json; charset=utf-8',
+          data: JSON.stringify(data),
+          success: function(callback) {
+                $(rowtoedit).closest('tr').children("#codeRow").html('<a href="/outlines?courseCode=' + callback.courseCode + '">' + callback.courseCode + '</a>');
+                $(rowtoedit).closest('tr').children("#nameRow").html('<a href="/todo?courseCode=' + callback.courseCode + '">' + callback.courseName + '</a>');
+                $(rowtoedit).closest('tr').children("#unitsRow").html('<a href="/exams?courseCode=' + callback.courseCode + '">' + callback.courseUnits + '</a>');
+                $(rowtoedit).closest('tr').children("#editButton").val(callback.courseId);
+                $(rowtoedit).closest('tr').children("#deleteButton").val(callback.courseId);
+                $(".edit-course-form").toggleClass("active");
+                $(".options-menu").removeClass("active");
+                },
+              error: function() {
+                $(".error").text("Either Course Code is Taken or Course Name is too long!");
+              }
+      });
+    });
+    // Hide the edit form because the user doesn't wish to edit any longer
+    $(document).on("click", "#cancelButton",function(e){
+                e.preventDefault(); 
+                $(".edit-course-form").removeClass("active");
+                $(".options-menu").removeClass("active");
+                $(".edit-course-form .tablehead").text("");
+                $(".edit-course-form #courseCode").val("");
+                $(".edit-course-form #courseName").val("");
+                $(".edit-course-form #courseUnits").val("");
+                $(".edit-course-form #cancelButton").val("");
+                $(".edit-course-form #saveButton").val("");
+                $(".error").text("");
+              });
+            
+    // Delete using ajax (Event delegation is used here so dynamically created buttons can work)
+    $("table").on("click", "#deleteButton", function(e){
+        if(confirm("Are you sure you want to delete the course and all it's information?") == true){
+            var courseId = $(this).val();
+            var hide = $(this);
+            var data = {rowId: courseId, status: "delete"}
+            $.ajax({
+                    type: 'POST',
+                    url: '/courses',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function(callback) {
+                        if(callback.status === "DONE"){
+                            $(hide).closest("tr").remove();
+                        }
+                    },
+                    error: function() {
+                      alert("Something went wrong!");
+                    },
+                  
+                }); 
+          }
+    }); 
+    });
+
+</script>
+
+{% endblock %}

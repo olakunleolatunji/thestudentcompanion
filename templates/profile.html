@@ -1,0 +1,392 @@
+{% extends "layout.html" %}
+{% block title %}
+Profile
+{% endblock %} 
+
+{% block main %}
+    
+<div class="profile-container">
+    <div class="profile-column" id="profileColumnLeft">
+        <p>Full Name</p>
+        <strong class="wrap-this" id="fullname">{{ user.fullname }}</strong>
+        <hr>
+        <p>Username</p>
+        <strong class="wrap-this" id="username">{{ user.username }}</strong>
+        <hr>
+        <p>School</p>
+        <strong class="wrap-this" id="school">{{ user.school }}</strong>
+        <hr>
+        <p>Student ID</p>
+        <strong class="wrap-this" id="studentID">{{ user.studentID }}</strong>
+        <hr>
+        <p>Major</p>
+        <strong class="wrap-this" id="major">{{ user.major }}</strong>
+        <hr>
+        <p>CGPA</p>
+        <strong class="wrap-this" id="cgpa">{{ user.cgpa }}</strong>
+        <div class="profile-direction">
+          <div class="go-right">&#10132</div>
+        </div>
+        
+    </div>
+    <div  class="profile-column" id="profileColumnRight">
+        <div class="profile-buttons-wrapper">
+        <a href="#editProfileForm"><button id="updateProfile" name="updateProfile" value="{{ user.id }}" class="profile-view-button">Update Profile</button></a>
+        <br>
+        <a href="#editPasswordForm"><button id="changePassword" name="changePassword" value="{{ user.id }}" class="profile-view-button">Change Password</button></a>
+        <br>
+        <a href="#megaTheme"><button id="theme" name="theme" value="{{ user.id }}" class="profile-view-button">Theme</button></a>
+        <br>
+        <button id="deleteAccount" name="deleteAccount" value="{{ user.id }}" class="profile-view-button">Deactivate Account</button>
+        <br>
+        </div>
+        <!-- Edit User Profile -->
+        <div class="edit-profile-form" id="editProfileForm">
+        <div class="user-content">
+            <form id="registerForm">
+                <h3>Update your profile</h3>
+                <div class="user-details">
+                  <div class="input-box">
+                    <span class="details">Full Name</span>
+                    <input type="text" autocomplete="off" autofocus id="fullname" name="fullname" placeholder="Enter your name" maxlength="70" required>
+                  </div>
+                  <div class="input-box">
+                    <span class="details">Username</span>
+                    <input type="text" autocomplete="off" autofocus id="username" name="username" placeholder="(Alphanumeric , ._-)" maxlength="25" required>
+                  </div>
+                  <div class="input-box">
+                    <span class="details">School</span>
+                    <input type="text" autocomplete="off" id="school" name="school" placeholder="Enter your school" maxlength="50" required>
+                  </div>
+                  <div class="input-box">
+                    <span class="details">Student ID</span>
+                    <input type="text" autocomplete="off" id="studentID" name="studentID" placeholder="Enter your student id" maxlength="30" required>
+                  </div>
+                  <div class="input-box">
+                    <span class="details">Major</span>
+                    <input type="text" autocomplete="off" id="major" name="major" placeholder="Enter your major" maxlength="100" required>
+                  </div>
+                  <div class="input-box">
+                    <span class="details">CGPA</span>
+                    <input type="text" autocomplete="off" id="cgpa" name="cgpa" placeholder="Enter your cgpa" required>
+                  </div>
+                </div>
+                <a href="/help#helpUpdateProfile"><div style="color: white;" class="error"></div></a>
+                <button class="profile-hidden-button" id="updateButton" name="updateButton">Update</button>
+              </form>
+            </div>
+        </div>
+        <div class="edit-password-form" id="editPasswordForm">
+          <div class="update-password-wrapper">
+              <form id="passwordForm">
+                  <h3>Change your password</h3>
+                  <div class="user-details">
+                    <div class="input-box">
+                      <span class="details">Old password</span>
+                      <input type="password" autocomplete="off" id="oldPassword" name="oldPassword" placeholder="8+ characters with 1+ digits" required>
+                    </div>
+                    <div class="input-box">
+                      <span class="details">New password</span>
+                      <input type="password" autocomplete="off" id="newPassword" name="newPassword" placeholder="8+ characters with 1+ digits" required>
+                    </div>
+                    <div class="input-box">
+                      <span class="details">Confirm new password</span>
+                      <input type="password" autocomplete="off" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                  </div>
+                  <a href="/help#helpChangePassword"><div style="color: white;" class="error"></div></a>
+                  <button class="profile-hidden-button" id="updateButton" name="updateButton">Change Password</button>
+                </form>
+              </div>
+          </div>
+          <br>
+        <div class="mega-theme-wrapper" id="megaTheme">
+          <h3>Change your theme</h3>
+          <br>
+          <div class="profile-theme-wrapper" id="">
+            <div style="background: #5f6a63;" class="dot"></div>
+            <div style="background: #acb2b2;" class="dot"></div>
+            <div style="background: #ebebed;" class="dot"></div>
+            <div style="background: #eabe7d;" class="dot"></div>
+            <div style="background: #a9543f;" class="dot"></div>
+            <p>P1</p>
+          </div>
+          <br>
+          <div class="profile-theme-wrapper" id="p2">
+            <div style="background: #304c89;" class="dot"></div>
+            <div style="background: #648de5" class="dot"></div>
+            <div style="background: #9eb7e5;" class="dot"></div>
+            <div style="background: #e8e5da" class="dot"></div>
+            <div style="background: #857b4e;" class="dot"></div>
+            <p>P2</p>
+          </div>
+          <br>
+          <div class="profile-theme-wrapper" id="p3">
+            <div style="background: #141274;" class="dot"></div>
+            <div style="background: #6554a8" class="dot"></div>
+            <div style="background: #faf3c0;" class="dot"></div>
+            <div style="background: #ffec51" class="dot"></div>
+            <div style="background: #e29300;" class="dot"></div>
+            <p>P3</p>
+          </div>
+          <br>
+          <div class="profile-theme-wrapper" id="p4">
+            <div style="background: #d86d3c;" class="dot"></div>
+            <div style="background: #dfbea7" class="dot"></div>
+            <div style="background: #e6d4d4;" class="dot"></div>
+            <div style="background: #a4d0bb" class="dot"></div>
+            <div style="background: #79a1b0;" class="dot"></div>
+            <p>P4</p>
+          </div>
+          <br>
+          <div class="profile-theme-wrapper" id="p5">
+            <div style="background: #69620d;" class="dot"></div>
+            <div style="background: #fff895" class="dot"></div>
+            <div style="background: #f7f4e1;" class="dot"></div>
+            <div style="background: #8cd88f" class="dot"></div>
+            <div style="background: #3f612d;" class="dot"></div>
+            <p>P5</p>
+          </div>
+          <br>
+          <div class="profile-theme-wrapper" id="p6">
+            <div style="background: #090018;" class="dot"></div>
+            <div style="background: #454d66" class="dot"></div>
+            <div style="background: #e9d2e8;" class="dot"></div>
+            <div style="background: #ffffff" class="dot"></div>
+            <div style="background: #960202;" class="dot"></div>
+            <p>P6</p>
+          </div>
+          <br>
+          <div class="profile-theme-wrapper" id="p7">
+            <div style="background: #0d7239;" class="dot"></div>
+            <div style="background: #7eb997" class="dot"></div>
+            <div style="background: #fefee3;" class="dot"></div>
+            <div style="background: #ffc9b9;" class="dot"></div>
+            <div style="background: #d66245;" class="dot"></div>
+            <p>P7</p>
+          </div>
+          <br>
+          <div class="profile-theme-wrapper" id="p8">
+            <div style="background: #000000;" class="dot"></div>
+            <div style="background: #ffffff;" class="dot"></div>
+            <div style="background: #000000;" class="dot"></div>
+            <div style="background: #ffffff;" class="dot"></div>
+            <div style="background: #000000;" class="dot"></div>
+            <p>Dudu-Funfun</p>
+          </div>
+          <br>
+          <div class="profile-theme-wrapper" id="p9">
+            <div style="background: #6c757d;" class="dot"></div>
+            <div style="background: #ffffff;" class="dot"></div>
+            <div style="background: #f8f9fa;" class="dot"></div>
+            <div style="background: #e9ecef;" class="dot"></div>
+            <div style="background: #343a40;" class="dot"></div>
+            <p>Classic</p>
+          </div>
+          <br>
+          <div class="profile-theme-wrapper" id="p10">
+            <div style="background: #ffffff;" class="dot"></div>
+            <div style="background: #323533" class="dot"></div>
+            <div style="background: #a9543f;" class="dot"></div>
+            <div style="background: #acb2b2" class="dot"></div>
+            <div style="background: #000000;" class="dot"></div>
+            <p>Night Mode</p>
+          </div>
+        </div>
+    </div>
+</div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+      $(".profile-container").on("click", function(e){
+        $(".profile-column").toggleClass("compressed");
+        $(".go-right").toggleClass("left");
+      });
+      $(".profile-buttons-wrapper").on("click", function(e){
+        e.stopPropagation();
+      });
+      $(".edit-profile-form").on("click", function(e){
+        e.stopPropagation();
+      });
+      $(".edit-password-form").on("click", function(e){
+        e.stopPropagation();
+      });
+      $(".mega-theme-wrapper").on("click", function(e){
+        e.stopPropagation();
+      });
+  // Show update profile form
+    $("#updateProfile").click(function(){
+        $(".edit-profile-form").toggleClass("active");
+        $(".edit-password-form").removeClass("active");
+        $(".mega-theme-wrapper").removeClass("active");
+        $(".profile-theme-wrapper").removeClass("active");
+        var userId = $(this).val();
+        var data = {userId: userId, fullname: null, username: null, school: null, studentID:null, major: null, cgpa:null, status: "edit"}
+        $.ajax({
+                type: 'POST',
+                url: '/profile',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if(callback.status === "DONE"){
+                        // Select the elements this way because the elements for the new course form have the same ID, to avoid errors
+                        $(".error").text("");
+                        $(".edit-profile-form #fullname").val(callback.fullname);
+                        $(".edit-profile-form #username").val(callback.username);
+                        $(".edit-profile-form #school").val(callback.school);
+                        $(".edit-profile-form #studentID").val(callback.studentID);
+                        $(".edit-profile-form #major").val(callback.major);
+                        $(".edit-profile-form #cgpa").val(callback.cgpa);
+                        $(".edit-profile-form #updateButton").val(callback.userId);
+                    }
+                },
+                error: function() {
+                  alert("Something went wrong!");
+                },
+              
+            });
+    });
+  
+    // Update user details
+    $("#registerForm").on('submit',function (e){
+        var data = {
+            fullname: $(".edit-profile-form #fullname").val(),
+            username:$(".edit-profile-form #username").val(),
+            school: $(".edit-profile-form #school").val(),
+            studentID: $(".edit-profile-form #studentID").val(),
+            major: $(".edit-profile-form #major").val(),
+            cgpa: $(".edit-profile-form #cgpa").val(),
+            userId: $(".edit-profile-form #saveButton").val(),
+            status: "saveUpdate"
+        }
+        e.preventDefault();
+        $.ajax({
+        type: 'POST',
+        url: '/profile',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        success: function(callback) {
+            if(callback.status == "error1"){
+              $(".error").text("Username is taken!");
+              }
+              if(callback.status == "error2"){
+              $(".error").text("Username can be alphanumeric + _.- and 1-25 characters long!");
+              }
+              if(callback.status == "success"){
+                $("#profileColumnLeft #fullname").text(callback.fullname);
+                $("#profileColumnLeft #username").text(callback.username);
+                $("#profileColumnLeft #school").text(callback.school);
+                $("#profileColumnLeft #studentID").text(callback.studentID);
+                $("#profileColumnLeft #major").text(callback.major);
+                $("#profileColumnLeft #cgpa").text(callback.cgpa);
+                $(".edit-profile-form").toggleClass("active");
+              }
+                },
+            error: function() {
+                $(".error").text("Something went wrong!");
+            }
+    });
+    });
+
+    $("#changePassword").click(function(){
+        $(".edit-password-form").toggleClass("active");
+        $(".edit-profile-form").removeClass("active");
+        $(".mega-theme-wrapper").removeClass("active");
+    });
+
+    // Update password
+    $("#passwordForm").on('submit',function (e){
+        var data = {
+            oldPassword: $(".edit-password-form #oldPassword").val(),
+            newPassword:$(".edit-password-form #newPassword").val(),
+            confirmPassword: $(".edit-password-form #confirmPassword").val(),
+            status: "changePassword"
+        }
+        e.preventDefault();
+        $.ajax({
+        type: 'POST',
+        url: '/profile',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        success: function(callback) {
+            if(callback.status == "error1"){
+            $(".error").text("Old Password is wrong");
+            }
+            if(callback.status == "error2"){
+            $(".error").text("New password does not match!");
+            }
+            if(callback.status == "error3"){
+            $(".error").text("Password must be 8+ characters with at least one digit");
+            }
+            if(callback.status == "success"){
+              $(".edit-password-form").toggleClass("active");
+            }
+            },
+        error: function() {
+            alert("Something went wrong!");
+        }
+    });
+    });
+
+    $("#deleteAccount").click(function(e){
+        $(".edit-profile-form").removeClass("active");
+        $(".edit-password-form").removeClass("active");
+        $(".mega-theme-wrapper").removeClass("active");
+        if(confirm("Are you sure you want to deactivate your account?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+                var data = {status: "deactivate"}
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/deactivation',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    alert(callback.status);
+                    window.location.href = "/logout";
+                      },
+                    error: function() {
+                      alert("Something went wrong!");
+                    }
+            });
+        }
+        }
+    });
+
+    $("#theme").click(function(){
+      $(".mega-theme-wrapper").toggleClass("active");
+        $(".profile-theme-wrapper").toggleClass("active");
+      $(".edit-profile-form").removeClass("active");
+        $(".edit-password-form").removeClass("active");
+      });
+
+    $(".profile-theme-wrapper").on('click',function (e){
+        var paletteID = $(this).attr('id');
+        var ID = paletteID.slice(1);
+        var data = {styleID: ID, status: "changeTheme"}
+        e.preventDefault();
+        $.ajax({
+        type: 'POST',
+        url: '/profile',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        success: function(callback) {
+          $("head link").attr("href", "../static/" + callback.theme);
+        },
+        error: function() {
+            alert("Something went wrong!");
+        }
+    });
+    });
+
+});
+        
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% block title %}
+Home
+{% endblock %} 
+
+{% block main %}
+<div class="home-container">
+    <div class="home-column" id="homeColumnLeft">
+        <p id="userFullname"><strong>Hello, {{ user.fullname }}</strong></p>
+        <p id="userUsername">{{ user.username }}</p>
+        <p id="userSchool">School: {{ user.school }}</p>
+        <p id="userMajor">Major: {{user.major}}</p>
+        <p id="userStudentID">Student ID: {{user.studentID }}</p>
+        <p id="userCGPA">CGPA: {{ user.cgpa }}</p>
+    </div>
+    <div  class="home-column" id="homeColumnRight">
+        <div class="home-table-wrapper">
+        <table class="home-table">
+            <h3><a href="/timetable">Classes Today</a></h3>
+            <thead>
+                <tr>
+                    <th class="home-classtime-column" scope="col" >Time</th>
+                    <th class="home-classcode-column" scope="col" >Course</th>
+                    <th class="home-classvenue-column" scope="col" >Venue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lecture in classes %}
+                <tr>
+                    <td class="wrap-this" scope="row">{{ lecture.classTime }}</td>
+                    <td class="wrap-this" scope="row">{{ lecture.courseCode }}</td>
+                    <td class="wrap-this" scope="row">{{ lecture.classVenue }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <table class="home-table">
+            <h3><a href="/todo">Urgent Tasks</a></h3>
+            <thead>
+                <tr>
+                    <th class="home-taskdeadline-column" scope="col" >Deadline</th>
+                    <th class="home-taskcode-column" scope="col" >Course</th>
+                    <th class="home-tasktask-column" scope="col" >Task</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in todo %}
+                <tr>
+                    <td class="wrap-this" scope="row">{{ task.taskDeadline }}</td>
+                    <td class="wrap-this" scope="row">{{ task.taskCourse }}</td>
+                    <td class="wrap-this" scope="row">{{ task.task }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <table class="home-table">
+            <h3><a href="/exams">Upcoming Assessments</a></h3>
+            <thead>
+                <tr>
+                    <th class="home-examdatetime-column" scope="col" >Date & Time</th>
+                    <th class="home-examcode-column" scope="col" >Course</th>
+                    <th class="gome-examvenue-column" scope="col" >Venue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exam in exams%}
+                <tr>
+                    <td class="wrap-this" scope="row">{{ exam.examDateTime }}</td>
+                    <td class="wrap-this" scope="row">{{ exam.courseCode }}</td>
+                    <td class="wrap-this" scope="row">{{ exam.examVenue }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+  
+  </div>
+{% endblock %}
+
+

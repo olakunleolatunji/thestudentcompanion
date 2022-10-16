@@ -1,0 +1,495 @@
+{% extends "layout.html" %}
+{% block title %}
+Courses
+{% endblock %} 
+
+{% block main %}
+    
+<div class="page-container">
+<table class="table" id="examTable">
+    <h1 class="tablehead">Assessments</h1>
+    <form action="/exams", method="post">
+      <div class="exam-view">
+        {% if view == 1 or view == 4 %}
+        <button name="examsFilter" id="viewNow" value="1" class="exam-view-button">All</button>
+        <button name="examsFilter" value="2" class="exam-view-button">Mid Semesters</button>
+        <button name="examsFilter" value="3" class="exam-view-button">Exams</button>
+        {% elif view == 2 %}
+        <button name="examsFilter" value="1" class="exam-view-button">All</button>
+        <button name="examsFilter" id="viewNow" value="2" class="exam-view-button">Mid Semesters</button>
+        <button name="examsFilter" value="3" class="exam-view-button">Exams</button>
+        {% elif view == 3 %}
+        <button name="examsFilter" value="1" class="exam-view-button">All</button>
+        <button name="examsFilter" value="2" class="exam-view-button">Mid Semesters</button>
+        <button name="examsFilter" id="viewNow" value="3" class="exam-view-button">Exams</button>
+        {% endif %}
+      </div>
+    </form>
+    {% if view == 1 %}
+    <h4 class="table-side-text">All Assessments</h4>
+    {% elif view == 2 %}
+    <h4 class="table-side-text">Mid Semesters</h4>
+    {% elif view == 3 %}
+    <h4 class="table-side-text">Examinations</h4>
+    {% elif view == 4 %}
+    <h4 class="table-side-text">{{courseCode}} Assessments</h4>
+    {% endif %}
+    <thead class="table-header">
+      <tr>
+        <th scope="col" class="exam-datetime-column">Date Time</th>
+        <th scope="col" class="exam-code-column">Course</th>
+        <th scope="col" class="exam-venue-column">Venue</th>
+        <th scope="col" class="exam-status-column">Status</th>
+        <th scope="col" class="exam-edit-column">&#9998</th>
+      </tr>
+    </thead>
+    <tbody> 
+      {% for exam in exams %}
+      <tr>
+        <td scope="row" id="datetimeRow">{{ exam.examDateTime }}</td>
+        <td scope="row" class="wrap-this" id="codeRow">{{ exam.courseCode }} ({{ exam.examType }})</td>
+        <td scope="row" class="wrap-this" id="venueRow">{{ exam.examVenue }}</td>
+        <td scope="row" id="statusRow">
+          {% if exam.examStatus == "Undone" %}
+          <button class="status-button" type="submit" value="{{ exam.id }}" name="statusChanger">{{ exam.examStatus }}</button>
+          {% elif exam.examStatus == "Done" %}
+          <button class="status-button-done" type="submit" value="{{ exam.id }}" name="statusChanger">{{ exam.examStatus }}</button>
+          {% endif %}
+        </td>
+        <td scope="row" id="optionsRow">
+          <div class="options-hamburger">
+          <div class="oh-linewrapper">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+            <div class="options-menu">
+              <ul>
+                <li>
+                  <a href="#editExamForm"><button type="submit" value="{{ exam.id }}" id="editButton" name="edit">Edit</button></a>
+                  <button id="deleteButton" type="submit" value="{{ exam.id }}" name="delete">&#10008</button> 
+                </li>
+            </ul>
+            </div>
+        </div>
+          
+        </td>
+      </tr> 
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="new-button-div">
+    {% if view != 2 and view != 3 %}
+    <a href="#newMSForm"><button class="new-ms-button">Add Mid-Semester</button></a>
+    <a href="#newEForm"><button class="new-e-button">Add Exam</button></a>
+    {% elif view == 2 %}
+    <a href="#newMSForm"><button class="new-ms-button">Add Mid-Semester</button></a>
+    {% elif view == 3 %}
+    <a href="#newEForm"><button class="new-e-button">Add Exam</button></a>
+    {% endif %}
+</div>
+  
+  <!-- Add a New Mid-Semester -->
+  <form class="new-ms-form" id="newMSForm">
+    <h3 class="tablehead">Add a New Mid-semester</h3>
+    <div class="input-wrapper">
+        <div class="input-box">
+          <label for="examDatime">Date & Time</label>
+            <input autocomplete="off" class="" id="examDateTime" name="examDateTime" placeholder="Enter mid-semester date and time" type="datetime-local" required>
+        </div>
+        <div class="input-box">
+              {% if view == 4%}
+              <label for="courseCode">Course Code</label>
+              <select class="" id="courseCode" name="courseCode" required>
+                <option selected value="{{courseCode}}">{{courseCode}}</option>
+              </select>
+              {% else %}
+              <label for="courseCode">Course Code</label>
+              <select class="" id="courseCode" name="courseCode" required>
+                  <option disabled selected value>Select Course Code</option>
+                  {% for course in courses %} 
+                      <option value="{{ course.courseCode }}">{{ course.courseCode }}</option>  
+                  {% endfor %} 
+              </select>
+              {% endif %}
+        </div>
+        <div class="input-box">
+          <label for="examVenue">Mid-Semester Venue</label>
+            <input autocomplete="off" autofocus class="" id="examVenue" name="examVenue" placeholder="Enter mid-semester venue" type="text" maxlength="50" required>
+        </div>
+        <input type="hidden" id="viewValue" name="viewValue" value="{{ view }}">
+        <a href="/help#helpExamAddEditDelete"><div class="error"></div></a>
+        <button class="add-course-button" value="MS" id="addMSE" name="addMSE" type="submit">Add Mid-Semester</button>
+      </div>
+  </form>
+  <!-- Add A New Exam -->
+  <form class="new-e-form" id="newEForm">
+    <h3 class="tablehead">Add a New Exam</h3>
+    <div class="input-wrapper">
+    <div class="input-box">
+      <label for="examDateTime">Date & Time</label>
+        <input autocomplete="off" class="" id="examDateTime" name="examDateTime" placeholder="Exam date and time" type="datetime-local" required>
+    </div>
+    <div class="input-box">
+        {% if view == 4%}
+        <label for="courseCode">Course Code</label>
+        <select class="" id="courseCode" name="courseCode" required>
+          <option selected value="{{courseCode}}">{{courseCode}}</option>
+        </select>
+        {% else %}
+        <label for="courseCode">Course Code</label>
+        <select class="" id="courseCode" name="courseCode" required>
+            <option disabled selected value>Course Code</option>
+            {% for course in courses %} 
+                <option value="{{ course.courseCode }}">{{ course.courseCode }}</option>  
+            {% endfor %} 
+        </select>
+        {% endif %}
+    </div>
+    <div class="input-box">
+      <label for="examVenue">Exam Venue</label>
+        <input autocomplete="off" autofocus class="" id="examVenue" name="examVenue" placeholder="Enter exam venue" type="text" maxlength="50" required>
+    </div>
+    <input type="hidden" id="viewValue" name="viewValue" value="{{ view }}">
+    <a href="/help#helpExamAddEditDelete"><div class="error"></div></a>
+    <button class="add-course-button" value="E" id="addMSE" name="addMSE" type="submit">Add Exam</button>
+  </div>
+</form>
+  <!-- Edit an Assessment -->
+  <form class="edit-course-form" id="editExamForm">
+    <h3 class="tablehead"></h3>
+    <div class="input-wrapper">
+    <div class="input-box">
+      <label for="examType">Assessment Type</label>
+        <select class="" id="examType" name="examType" required>
+            <option value="E" >Exam</option>
+            <option value="MS" >Mid-Semester</option>
+        </select>
+    </div>
+    <div class="input-box">
+      <label for="examDateTime">Date & Time</label>
+      <input autocomplete="off" class="" id="examDateTime" name="examDateTime" placeholder="Enter date and time" type="datetime-local" required>
+    </div>
+    <div class="input-box">
+      <label for="examVenue">Venue</label>
+        <input autocomplete="off" autofocus class="" id="examVenue" name="examVenue" placeholder="Enter venue" type="text" maxlength="50" required>
+    </div>
+    <br>
+    <a href="/help#helpExamAddEditDelete"><div class="error"></div></a>
+    <div class="input-wrapper-button-wrapper">
+  <button class="add-course-button" value="" id="cancelButton" name="cancel" type="submit">Cancel</button>
+  <button class="add-course-button" value="" id="saveButton" name="saveEdit" type="submit">Save</button>
+</div>
+</div>
+</form>
+</div>
+
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+  // Show mid-semester form, hide exam form or edit form
+  $(".new-ms-button").click(function(){
+    if($(".new-ms-button").hasClass("cancel")){
+    $(".new-ms-button").removeClass("cancel");
+    $(".new-ms-button").text("Add Mid-Semester");
+    $(".new-ms-form").toggleClass("active");
+    $(".edit-course-form").removeClass("active");
+    $(".new-e-form").removeClass("active");
+    $("#newMSForm").trigger("reset");
+    $(".error").text("");
+      return;
+    }
+    $(".new-e-button").removeClass("cancel");
+    $(".new-e-button").text("Add Exam");
+    $(".new-ms-form").toggleClass("active");
+    $(".new-e-form").removeClass("active");
+    $(".edit-course-form").removeClass("active");
+    $(".new-ms-button").addClass("cancel");
+    $(".new-ms-button").text("Cancel"); 
+    $(".error").text("");
+    });
+    // Show exam form, hide ms form or edit form
+    $(".new-e-button").click(function(){
+      if($(".new-e-button").hasClass("cancel")){
+        $(".new-e-button").removeClass("cancel");
+        $(".new-e-button").text("Add Exam");
+        $(".new-e-form").toggleClass("active");
+        $(".edit-course-form").removeClass("active");
+        $(".new-ms-form").removeClass("active");
+        $("#newEForm").trigger("reset");
+        $(".error").text("");
+          return;
+        }
+        $(".new-ms-button").removeClass("cancel");
+        $(".new-ms-button").text("Add Mid-Semester");
+        $(".new-e-form").toggleClass("active");
+        $(".new-ms-form").removeClass("active");
+        $(".edit-course-form").removeClass("active");
+        $(".new-e-button").addClass("cancel");
+        $(".new-e-button").text("Cancel"); 
+        $(".error").text("");
+    });
+    // Show edit and delete buttons, use event delegation so the newly added entries will work
+$(document).on("click", ".oh-linewrapper",function(e){
+  e.preventDefault();
+  var self = $(this).closest(".options-hamburger").children(".options-menu");
+  // If another options menu is open, close it first
+  if(self.hasClass("active")){
+    self.toggleClass("active");
+    return;
+  }
+  $(".options-menu").removeClass("active");
+  self.toggleClass("active"); 
+});
+
+    // Add a new mid semester assessment using Ajax
+    $("#newMSForm, #newEForm").on("submit", function(e){
+        e.preventDefault();
+            // Add according to type of assessment
+            if($(this).attr("id") == "newMSForm") {
+            var courseCode = $(".new-ms-form #courseCode").val();
+            var examDateTime = $(".new-ms-form #examDateTime").val();
+            var examVenue = $(".new-ms-form #examVenue").val();
+            var examType = "MS";
+            var examStatus = "Undone"; 
+            var viewValue =  $(".new-ms-form #viewValue").val();}
+            if($(this).attr("id") == "newEForm") {
+            var courseCode = $(".new-e-form #courseCode").val();
+            var examDateTime = $(".new-e-form #examDateTime").val();
+            var examVenue = $(".new-e-form #examVenue").val();
+            var examType = "E";
+            var examStatus = "Undone"; 
+            var viewValue =  $(".new-e-form #viewValue").val();}
+            examDateTime = examDateTime.replace(/T/g," ");
+        var data = {
+          courseCode: courseCode,
+          examDateTime: examDateTime,
+          examVenue: examVenue,
+          examType: examType,
+          examStatus: examStatus,
+          examId: null,
+          viewValue: viewValue,
+          status: "add"
+        }
+        // These needed to go in the function to show the forms, rather than the submit function because it causes problems if there's an error
+        // if($(this).attr("id") == "newMSForm") {
+        //       $("#newMSForm").trigger('reset');
+        //       $(".new-ms-form").toggleClass("active");
+        //      }
+        //     if($(this).attr("id") == "newEForm") {
+        //       $("#newEForm").trigger('reset');
+        //       $(".new-e-form").toggleClass("active");
+        //     }
+        $.ajax({
+          type:'POST',
+          url: '/exams',
+          dataType: 'json',
+          contentType: 'application/json; charset=utf-8',
+          data: JSON.stringify(data),
+          success: function(callback) {
+             $(".table tbody").append('<tr>' + 
+              '<td scope="row" id="datetimeRow">'+callback.examDateTime+'</td>' +
+                '<td scope="row" class="wrap-this" id="codeRow">'+callback.courseCode+ ' (' +callback.examType+ ')'+'</td>' +
+                '<td scope="row" class="wrap-this" id="venueRow">'+callback.examVenue+'</td>' +
+                '<td scope="row" id="statusRow">'+'<button class="status-button" type="submit" value="'+callback.examId+'" name="statusChanger">'+callback.examStatus+'</button>' +'</td>' +
+                '<td scope="row" id="optionsRow">' +
+                  '<div class="options-hamburger">' +
+                  '<div class="oh-linewrapper">' +
+                    '<div class="dot"></div>' +
+                    '<div class="dot"></div>' +
+                    '<div class="dot"></div>' +
+                  '</div>' +
+                    '<div class="options-menu">' +
+                      '<ul>'+
+                        '<li>'+
+                          '<a href="#editExamForm"><button type="submit" id="editButton" value="'+callback.examId+'" name="edit">Edit</button></a>'+
+                          '<button id="deleteButton" type="submit" value="'+callback.examId+'" name="delete">&#10008</button>' +
+                        '</li>'+
+                    '</ul>'+
+                    '</div>' +
+                '</div>' +
+            '</td>' +
+            '</tr>'
+            // In order for the hamburger to work here, event delegation had to be used on the click function for the hamburger
+            );
+            $("#newEForm").trigger("reset");
+            $("#newMSForm").trigger("reset");
+            $(".new-e-form").removeClass("active");
+            $(".new-ms-form").removeClass("active");
+            $(".new-ms-button").text("Add Mid-Semester");
+            $(".new-e-button").text("Add Exam");
+            $(".new-ms-button").removeClass("cancel");
+            $(".new-e-button").removeClass("cancel");
+            $(".error").text("");
+          },
+          error: function(){
+            if($(".new-ms-button").hasClass("cancel")){
+              $(".new-ms-button").text("Cancel");
+            }
+            if($(".new-e-button").hasClass("cancel")){
+              $(".new-e-button").text("Cancel");
+            }
+            $(".error").text("Something went wrong!");
+          }
+        })
+    });
+
+    // Get form to edit
+    $("table").on("click", "#editButton", function(e){
+      e.preventDefault();
+        // Make sure the add form is only showing cancel when it's open
+        $(".new-ms-button").removeClass("cancel");
+        $(".new-ms-button").text("Add Mid-Semester");
+        $(".new-e-button").removeClass("cancel");
+        $(".new-e-button").text("Add Exam");
+      // Make sure that clicking edit on a new row will open the form straight away
+        if($(".edit-course-form").hasClass("active")){
+        $(".edit-course-form").toggleClass("active");
+        }
+        // Displaying the form before getting the data won't prevent it from working properly because only one form can be open at once
+        // And the values will be set accordingly
+        // This needs to be here so we can move to the form on the button click, using <a href=""></a>
+        $(".new-ms-form").removeClass("active");
+        $(".new-e-form").removeClass("active");
+        $(".edit-course-form").toggleClass("active");
+        window.rowtoedit = $(this);
+        var rowId = $(this).val();
+        var data = {rowId: rowId, examDateTime: null, courseCode: null, examVenue: null, examType:null, examStatus: null, status: "edit"}
+        $.ajax({
+                type: 'POST',
+                url: '/exams',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if(callback.status === "DONE"){
+                        // Select the elements this way because the elements for the new course form have the same ID, to avoid errors
+                        $(".error").text("");
+                        $(".edit-course-form .tablehead").text("Edit " + callback.courseCode + " Assessment");
+                        $(".edit-course-form #examDateTime").val(callback.examDateTime);
+                        $(".edit-course-form #examVenue").val(callback.examVenue);
+                        $(".edit-course-form #examType").val(callback.examType);
+                        $(".edit-course-form #cancelButton").val(callback.rowId);
+                        $(".edit-course-form #saveButton").val(callback.rowId);
+                    }
+                },
+                error: function() {
+                  alert("Something went wrong!");
+                },
+              
+            }); 
+          });
+
+          // Submit the edited inputs to backend, receive on success and update the table
+          $("#editExamForm").on('submit',function (e){
+                var examDateTime = $(".edit-course-form #examDateTime").val(),
+                examDateTime = examDateTime.replace(/T/g," ");
+                var data = {
+                  courseCode: null,
+                  view: null,
+                  examDateTime: examDateTime,
+                  examVenue: $(".edit-course-form #examVenue").val(),
+                  examType: $(".edit-course-form #examType").val(),
+                  examId: $(".edit-course-form #saveButton").val(),
+                  status: "saveEdit",
+                }
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/exams',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+
+                      $(rowtoedit).closest('tr').children("#datetimeRow").text(callback.examDateTime);
+                      $(rowtoedit).closest('tr').children("#codeRow").text(callback.courseCode + " (" + callback.examType +")");
+                      $(rowtoedit).closest('tr').children("#venueRow").text(callback.examVenue);
+                      $(rowtoedit).closest('tr').children("#editButton").val(callback.examId);
+                      $(rowtoedit).closest('tr').children("#deleteButton").val(callback.examId);
+                      $(".edit-course-form").toggleClass("active");
+                      $(".options-menu").removeClass("active");
+                      var currentFilter = $("#viewNow").val();
+                      // The view determines if to show the edit or not depending on if the type has changed from E to MS or MS to E
+                      if (callback.view === "remove" && currentFilter != 1){
+                        $(rowtoedit).closest('tr').remove();
+                      }
+                      },
+                    error: function() {
+                      $(".error").text("Something went wrong!");
+                    }
+            });
+          });
+
+          // Hide the edit form because the user doesn't wish to edit any longer
+          $(document).on("click", "#cancelButton",function(e){
+            e.preventDefault(); 
+            $(".edit-course-form").removeClass("active");
+            $(".options-menu").removeClass("active");
+            $(".error").text("");
+            $(".edit-course-form .tablehead").text("");
+            $(".edit-course-form #examDateTime").val("");
+            $(".edit-course-form #examVenue").val("");
+            $(".edit-course-form #examType").val("");
+            $(".edit-course-form #cancelButton").val("");
+            $(".edit-course-form #saveButton").val("");
+          });
+
+    //  Ensure the status changing function works for both done urgent and undone values
+    $("table").on("click", ".status-button, .status-button-done", function(e) {
+            var examStatus = $(this).html();
+            var examIdValue = $(this).val();
+            var data = {examId: examIdValue, status:examStatus};
+            var examRow = $(this);
+
+            // Change the status button value using ajax post request
+            $.ajax({
+                type: 'POST',
+                url: '/exams',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    if (callback.status === "Done"){
+                      $(examRow).attr('class', 'status-button-done');
+                    }
+                    if (callback.status === "Undone"){
+                      $(examRow).attr('class', 'status-button');
+                    }
+                    $(examRow).html(callback.status);
+                },
+                error: function() {
+                    $(examRow).html("error!");
+                }
+            });
+        });
+        // Delete an assessment using ajax post request
+        $("table").on("click", "#deleteButton", function(e) {
+          if(confirm("Are you sure you want to delete the assessment?") == true){
+        var mseId = $(this).val();
+        var hide = $(this);
+        var data = {examId: mseId, status: "Delete"}
+        $.ajax({
+                type: 'POST',
+                url: '/exams',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if(callback.status === "DONE"){
+                        $(hide).closest('tr').remove();
+                    }
+                },
+                error: function() {
+                  alert("Something went wrong!");
+                }
+            });
+      }
+        }); 
+      });
+            
+</script>
+
+{% endblock %}

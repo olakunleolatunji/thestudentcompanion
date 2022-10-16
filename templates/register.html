@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block title %} Register at TSC {% endblock %}
+
+{% block main %}
+<div class="login-register-container">
+    <div class="user-content">
+    <div class="reg-title">Register</div>
+    <form id="registerForm">
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details">Full Name</span>
+            <input type="text" autocomplete="off" autofocus id="fullname" name="fullname" placeholder="Enter your name" maxlength="70" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Username</span>
+            <input type="text" autocomplete="off" autofocus id="username" name="username" placeholder="(Alphanumeric , ._-)" maxlength="25" required>
+          </div>
+          <div class="input-box">
+            <span class="details">School</span>
+            <input type="text" autocomplete="off" id="school" name="school" placeholder="Enter your school" maxlength="50" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Student ID</span>
+            <input type="text" autocomplete="off" id="studentID" name="studentID" placeholder="Enter your student id" maxlength="30" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Major</span>
+            <input type="text" autocomplete="off" id="major" name="major" placeholder="Enter your major" maxlength="100" required>
+          </div>
+          <div class="input-box">
+            <span class="details">CGPA</span>
+            <input type="text" autocomplete="off" id="cgpa" name="cgpa" placeholder="Enter your cgpa" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Password</span>
+            <input type="password" autocomplete="off" id="password" name="password" placeholder="8+ characters with 1+ digits" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Confirm Password</span>
+            <input type="password" autocomplete="off" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+          </div>
+        </div>
+        <a href="/help#helpRegister"><div class="error"></div></a>
+        <div class="button">
+          <input type="submit" value="Register">
+        </div>
+        <p>Already have an account? <a id="registerORlogin" href="/login">Log in</a></p>
+      </form>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+    $("#registerForm").on('submit',function(e){
+      e.preventDefault();
+                var data = {
+                    fullname : $('#fullname').val(),
+                    username : $('#username').val(),
+                    school : $('#school').val(),
+                    studentID : $('#studentID').val(),
+                    major : $('#major').val(),
+                    cgpa : $('#cgpa').val(),
+                    password : $('#password').val(),
+                    confirm_password : $('#confirm_password').val(),
+                    status: "register"
+                }
+                
+                $.ajax({
+                type: 'POST',
+                    url: '/register',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function(callback) {
+                      if(callback.status === "registered"){
+                        window.location.href = "/home";
+                      }
+                      if(callback.status === "error1"){
+                        $('.error').text("Username is taken!");
+                      }
+                      if(callback.status === "error2"){
+                        $('.error').text("Username allows 0-9, a-z, A-Z, .-_ and must be 1-25 characters long. Special characters can not begin the username or be repeated successively.");
+                      }
+                      if(callback.status === "error3"){
+                        $('.error').text("Passwords do not match!");
+                      }
+                      if(callback.status === "error4"){
+                        $('.error').text("Password must be 8 or more characters including one digit");
+                      }
+                    },
+                    error: function() {
+                      $(".error").text("Something went wrong!");
+                    }
+            });
+          });
+</script>
+{% endblock %}

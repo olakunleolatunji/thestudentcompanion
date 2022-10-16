@@ -1,0 +1,478 @@
+{% extends "layout.html" %}
+{% block title %}
+To-Do
+{% endblock %} 
+
+{% block main %}
+    
+<div class="page-container">
+<table class="table" id="todoTable">
+    <h1 class="tablehead">To-Do</h1>
+    <form action="/todo", method="post">
+      <div class="todo-view">
+        {% if view == 1 or view == 4 %}
+        <button name="todoFilter" id="viewNow" value="1" class="todo-view-button">All</button>
+        <button name="todoFilter" value="2" class="todo-view-button">Academic</button>
+        <button name="todoFilter" value="3" class="todo-view-button">Non-Academic</button>
+        {% elif view == 2 %}
+        <button name="todoFilter" value="1" class="todo-view-button">All</button>
+        <button name="todoFilter" id="viewNow" value="2" class="todo-view-button">Academic</button>
+        <button name="todoFilter" value="3" class="todo-view-button">Non-Academic</button>
+        {% elif view == 3 %}
+        <button name="todoFilter" value="1" class="todo-view-button">All</button>
+        <button name="todoFilter" value="2" class="todo-view-button">Academic</button>
+        <button name="todoFilter" id="viewNow" value="3" class="todo-view-button">Non-Academic</button>
+        {% endif %}
+      </div>
+    </form>
+    {% if view == 1 %}
+    <h4 class="table-side-text">All Tasks</h4>
+    {% elif view == 2 %}
+    <h4 class="table-side-text">Academic Tasks</h4>
+    {% elif view == 3 %}
+    <h4 class="table-side-text">Non-Academic Tasks</h4>
+    {% elif view == 4 %}
+    <h4 class="table-side-text">{{courseCode}} Tasks</h4>
+    {% endif %}
+    <thead class="table-header">
+      <tr>
+        {% if view == 1 or view == 2%}
+        <th scope="col" class="todo-deadline-column">Deadline</th>
+        <th scope="col" class="todo-code-column">Course</th>
+        <th scope="col" class="todo-task-column">Task</th>
+        <th scope="col" class="todo-status-column">Status</th>
+        <th scope="col" class="todo-edit-column">&#9998</th>
+        {% else %}
+        <th scope="col" class="todo-deadline-na-column">Deadline</th>
+        <th scope="col" class="todo-task-na-column">Task</th>
+        <th scope="col" class="todo-status-na-column">Status</th>
+        <th scope="col" class="todo-edit-na-column">&#9998</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody> 
+      {% for task in todo %}
+      <tr>
+        <td scope="row" id="deadlineRow">{{ task.taskDeadline}}</td>
+        {% if view == 1 or view == 2 %}
+        <td scope="row" class="wrap-this" id="codeRow">{{ task.taskCourse }}</td>
+        {% endif %}
+        <td scope="row" class="wrap-this" id="taskRow">{{ task.task }}</td>
+        <td scope="row" id="statusRow">
+          {% if task.taskStatus == "Undone" %}
+          <button class="status-button" type="submit" value="{{ task.id }}" name="statusChanger">{{ task.taskStatus }}</button>
+          {% elif task.taskStatus == "Done" %}
+          <button class="status-button-done" type="submit" value="{{ task.id }}" name="statusChanger">{{ task.taskStatus }}</button>
+          {% elif task.taskStatus == "Urgent" %}
+          <button class="status-button-urgent" type="submit" value="{{ task.id }}" name="statusChanger">{{ task.taskStatus }}</button>
+          {% endif %}
+        </td>
+        <td scope="row" id="optionsRow">
+          <div class="options-hamburger">
+          <div class="oh-linewrapper">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+            <div class="options-menu">
+              <ul>
+                <li>
+                  <a href="#editTaskForm"><button value="{{ task.id }}" type="submit" id="editButton" name="edit">Edit</button></a>
+                  <button id="deleteButton" type="submit" value="{{ task.id }}" id="deleteButton" name="delete">&#10008</button> 
+                </li>
+            </ul>
+            </div>
+        </div>
+          
+        </td>
+      </tr> 
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="new-button-div">
+    {% if view == 1 %}
+    <a href="#newATForm"><button class="new-at-button">New Academic Task</button></a>
+    <a href="#newNATForm"><button class="new-nat-button">New Non-Academic Task</button></a>
+    {% elif view == 2 %}
+    <a href="#newATForm"><button class="new-at-button">New Academic Task</button></a>
+    {% elif view == 3 %}
+    <a href="#newNATForm"><button class="new-nat-button">New Non-Academic Task</button></a>
+    {% elif view == 4 %}
+    <a href="#newATForm"><button class="new-at-button">New {{ courseCode }} Task</button></a>
+    {% endif %}
+</div>
+  
+  <!-- Add New Academic Task -->
+  <form class="new-at-form" id="newATForm">
+    <div class="input-wrapper">
+      <h3>Add A New Academic Task</h3>
+        <div class="input-box">
+          <label for="taskDeadline">Deadline</label>
+            <input autocomplete="off" class="form-control" id="taskDeadline" name="taskDeadline" placeholder="Enter deadline" type="datetime-local" required>
+        </div>
+        <div class="input-box">
+              {% if view == 4%}
+              <label for="courseCode">Course Code</label>
+              <select class="form-control" id="courseCode" name="courseCode" required>
+                <option selected value="{{courseCode}}">{{courseCode}}</option>
+              </select>
+              {% else %}
+              <label for="courseCode">Course Code</label>
+              <select class="form-control" id="courseCode" name="courseCode" required>
+                  <option disabled selected value>Course Code</option>
+                  {% for course in courses %} 
+                      <option value="{{ course.courseCode }}">{{ course.courseCode }}</option>  
+                  {% endfor %} 
+              </select>
+              {% endif %}
+        </div>
+        <div class="input-box">
+          <label for="task">Task</label>
+            <input autocomplete="off" autofocus class="form-control" id="task" name="task" placeholder="Enter task" type="text" maxlength="300" required>
+        </div>
+        <input type="hidden" id="viewValue" name="viewValue" value="{{ view }}">
+        <a href="/help#helpTaskAddEditDelete"><div class="error"></div></a>
+        <button class="add-course-button" value="A" id="addAT" name="addAT" type="submit">Add Task</button>
+      </div>
+  </form>
+  <!-- Add A New Non-Academic Task -->
+  <form class="new-nat-form" id="newNATForm">
+    <div class="input-wrapper">
+      <h3>Add A New Non-Academic Task</h3>
+    <div class="input-box">
+      <label for="taskDeadline">Deadline</label>
+        <input autocomplete="off" class="form-control" id="taskDeadline" name="taskDeadline" placeholder="Enter deadline" type="datetime-local" required>
+    </div>
+    <div class="input-box">
+      <label for="task">Task</label>
+        <input autocomplete="off" autofocus class="form-control" id="task" name="task" placeholder="Enter task" type="text" maxlength="300" required>
+    </div>
+    <input type="hidden" id="viewValue" name="viewValue" value="{{ view }}">
+    <a href="/help#helpTaskAddEditDelete"><div class="error"></div></a>
+    <button class="add-course-button" value="NA" id="addNAT" name="addNAT" type="submit">Add Task</button>
+  </div>
+</form>
+  <!-- Edit an Assessment -->
+  <form class="edit-course-form" id="editTaskForm">
+    <div class="input-wrapper">
+    <h3 class="tablehead"></h3>
+    <div class="input-box">
+      <label for="taskDeadline">Deadline</label>
+      <input autocomplete="off" class="form-control" id="taskDeadline" name="taskDeadline" placeholder="Enter deadline" type="datetime-local" required>
+    </div>
+    <div class="input-box">
+      <label for="task">Task</label>
+        <input autocomplete="off" autofocus class="form-control" id="task" name="task" placeholder="Enter task" type="text" maxlength="300" required>
+    </div>
+    <a href="/help#helpTaskAddEditDelete"><div class="error"></div></a>
+    <div class="input-wrapper-button-wrapper">
+  <button class="add-course-button" value="" id="cancelButton" name="cancel" type="submit">Cancel</button>
+  <button class="add-course-button" value="" id="saveButton" name="saveEdit" type="submit">Save</button>
+</div>
+</div>
+</form>
+</div>
+
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+  // Show academic task form
+  $(".new-at-button").click(function(){
+    if($(".new-at-button").hasClass("cancel")){
+    $(".new-at-button").removeClass("cancel");
+    $(".new-at-button").text("New Academic Task");
+    $(".new-at-form").toggleClass("active");
+    $(".edit-course-form").removeClass("active");
+    $(".new-nat-form").removeClass("active");
+    $("#newATForm").trigger('reset');
+    $(".error").text("");
+      return;
+    }
+    $(".new-nat-button").removeClass("cancel");
+    $(".new-nat-button").text("New Non-Academic Task");
+    $(".new-at-form").toggleClass("active");
+    $(".new-nat-form").removeClass("active");
+    $(".edit-course-form").removeClass("active");
+    $(".new-at-button").addClass("cancel");
+    $(".new-at-button").text("Cancel"); 
+    $(".error").text("");
+    });
+    // Show non-academic task form
+    $(".new-nat-button").click(function(){
+      if($(".new-nat-button").hasClass("cancel")){
+        $(".new-nat-button").removeClass("cancel");
+        $(".new-nat-button").text("New Non-Academic Task");
+        $(".new-nat-form").toggleClass("active");
+        $(".edit-course-form").removeClass("active");
+        $(".new-at-form").removeClass("active");
+        $("#newNATForm").trigger("reset");
+        $(".error").text("");
+          return;
+        }
+        $(".new-at-button").removeClass("cancel");
+        $(".new-at-button").text("New Academic Task");
+        $(".new-nat-form").toggleClass("active");
+        $(".new-at-form").removeClass("active");
+        $(".edit-course-form").removeClass("active");
+        $(".new-nat-button").addClass("cancel");
+        $(".new-nat-button").text("Cancel"); 
+        $(".error").text("");
+    });
+// Show edit and delete buttons, use event delegation so the newly added entries will work
+$(document).on("click", ".oh-linewrapper",function(e){
+  e.preventDefault();
+  var self = $(this).closest(".options-hamburger").children(".options-menu");
+  // If another options menu is open, close it first
+  if(self.hasClass("active")){
+    self.toggleClass("active");
+    return;
+  }
+  $(".options-menu").removeClass("active");
+  self.toggleClass("active"); 
+});
+
+    // Add a new task using Ajax
+    $("#newATForm, #newNATForm").on("submit", function(e){
+        e.preventDefault();
+            // Add according to type of assessment
+            if($(this).attr("id") == "newATForm") {
+            var courseCode = $(".new-at-form #courseCode").val();
+            var taskDeadline = $(".new-at-form #taskDeadline").val();
+            var task = $(".new-at-form #task").val();
+            var taskType = "AT";
+            var taskStatus = "Undone"; 
+            var viewValue =  $(".new-at-form #viewValue").val();}
+            if($(this).attr("id") == "newNATForm") {
+            var courseCode = "---";
+            var taskDeadline = $(".new-nat-form #taskDeadline").val();
+            var task = $(".new-nat-form #task").val();
+            var taskType = "NAT";
+            var taskStatus = "Undone"; 
+            var viewValue =  $(".new-nat-form #viewValue").val();}
+            taskDeadline = taskDeadline.replace(/T/g," ");
+        var data = {
+          taskCourse: courseCode,
+          taskDeadline: taskDeadline,
+          task: task,
+          taskType: taskType,
+          taskStatus: taskStatus,
+          taskId: null,
+          viewValue: viewValue,
+          status: "add"
+        }
+        
+        $.ajax({
+          type:'POST',
+          url: '/todo',
+          dataType: 'json',
+          contentType: 'application/json; charset=utf-8',
+          data: JSON.stringify(data),
+          success: function(callback) {
+            $(".table tbody").append('<tr>' + 
+              '<td scope="row" id="deadlineRow">'+callback.taskDeadline+'</td>' +
+                '{% if view == 1 or view == 2 %}' +
+                '<td scope="row" class="wrap-this" id="codeRow">'+callback.taskCourse+'</td>'+
+                '{% endif %}'+
+                '<td scope="row" class="wrap-this" id="taskRow">'+callback.task+'</td>' +
+                '<td scope="row" id="statusRow">'+'<button class="status-button" type="submit" value="'+callback.taskId+'" name="statusChanger">'+callback.taskStatus+'</button>' +'</td>' +
+                '<td scope="row" id="optionsRow">' +
+                  '<div class="options-hamburger">' +
+                  '<div class="oh-linewrapper">' +
+                    '<div class="dot"></div>' +
+                    '<div class="dot"></div>' +
+                    '<div class="dot"></div>' +
+                  '</div>' +
+                    '<div class="options-menu">' +
+                      '<ul>'+
+                        '<li>'+
+                          '<a href="#editTaskForm"><button id="editButton" type="submit" value="'+callback.taskId+'" name="edit">Edit</button></a>'+
+                          '<button id="deleteButton" type="submit" value="'+callback.taskId+'" name="delete">&#10008</button>' +
+                        '</li>'+
+                    '</ul>'+
+                    '</div>' +
+                '</div>' +
+            '</td>' +
+            '</tr>'
+            // In order for the hamburger to work here, event delegation had to be used on the click function for the hamburger
+            );
+            $("#newATForm").trigger("reset");
+            $("#newNATForm").trigger("reset");
+            $(".new-at-form").removeClass("active");
+            $(".new-nat-form").removeClass("active");
+            $(".new-at-button").text("New Academic Task");
+            $(".new-nat-button").text("New Non-Academic Task");
+            $(".new-at-button").removeClass("cancel");
+            $(".new-nat-button").removeClass("cancel");
+            $(".error").text("");
+          },
+          error: function(){
+            if($(".new-nat-button").hasClass("cancel")){
+              $(".new-nat-button").text("Cancel");
+            }
+            if($(".new-at-button").hasClass("cancel")){
+              $(".new-at-button").text("Cancel");
+            }
+            $(".error").text("Something went wrong!");
+          }
+        })
+    });
+
+    // Get form to edit
+    $("table").on("click", "#editButton", function(e){
+      // Make sure the add form is only showing cancel when it's open
+      $(".new-at-button").removeClass("cancel");
+      $(".new-at-button").text("New Academic Task");
+      $(".new-nat-button").removeClass("cancel");
+      $(".new-nat-button").text("New Non-Academic Task");
+      if($(".edit-course-form").hasClass("active")){
+        $(".edit-course-form").toggleClass("active");
+        }
+        $(".new-at-form").removeClass("active");
+        $(".new-nat-form").removeClass("active");
+      $(".edit-course-form").toggleClass("active");
+        window.rowtoedit = $(this);
+        var taskId = $(this).val();
+        var data = {taskId: taskId, taskDeadline: null, taskCourse: null, task: null, taskType:null, taskStatus: null, status: "edit"}
+        $.ajax({
+                type: 'POST',
+                url: '/todo',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if(callback.status === "DONE"){
+                        // Select the elements this way because the elements for the new course form have the same ID, to avoid errors
+                        $(".error").text("");
+                        $(".edit-course-form .tablehead").text("Edit " + callback.taskCourse + " Task");
+                        $(".edit-course-form #taskDeadline").val(callback.taskDeadline);
+                        $(".edit-course-form #task").val(callback.task);
+                        $(".edit-course-form #cancelButton").val(callback.taskId);
+                        $(".edit-course-form #saveButton").val(callback.taskId);
+                        
+                    }
+                },
+                error: function() {
+                  alert("Something went wrong!")
+                },
+              
+            }); 
+          });
+
+      // Submit the edited inputs to backend, receive on success and update the table
+      $("#editTaskForm").on('submit',function (e){
+                var taskDeadline= $(".edit-course-form #taskDeadline").val(),
+                taskDeadline = taskDeadline.replace(/T/g," ");
+                var data = {
+                  courseCode: null,
+                  view: null,
+                  taskDeadline: taskDeadline,
+                  task: $(".edit-course-form #task").val(),
+                  taskType: null,
+                  taskId: $(".edit-course-form #saveButton").val(),
+                  status: "saveEdit",
+                }
+                e.preventDefault();
+                $.ajax({
+                type: 'POST',
+                url: '/todo',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                      $(rowtoedit).closest('tr').children("#deadlineRow").text(callback.taskDeadline);
+                      $(rowtoedit).closest('tr').children("#taskRow").text(callback.task);
+                      $(rowtoedit).closest('tr').children("#editButton").val(callback.taskId);
+                      $(rowtoedit).closest('tr').children("#deleteButton").val(callback.taskId);
+                      $(".edit-course-form").toggleClass("active");
+                      $(".options-menu").removeClass("active");
+                      },
+                    error: function() {
+                      $(".error").text("Something went wrong!");
+                    }
+            });
+          });
+
+          // Hide the edit form because the user doesn't wish to edit any longer
+          $(document).on("click", "#cancelButton",function(e){
+            e.preventDefault(); 
+            $(".edit-course-form").removeClass("active");
+            $(".options-menu").removeClass("active");
+            $(".error").text("");
+            $(".edit-course-form .tablehead").text("");
+            $(".edit-course-form #taskDeadline").val("");
+            $(".edit-course-form #task").val("");
+            $(".edit-course-form #cancelButton").val("");
+            $(".edit-course-form #saveButton").val("");
+                        
+          });
+
+    //  Ensure the status changing function works for both done, urgent and undone values
+    $("table").on("click", ".status-button, .status-button-done, .status-button-urgent", function(e) {
+            var taskStatus = $(this).html();
+            var taskIdValue = $(this).val();
+            var data = {taskId: taskIdValue, status:taskStatus};
+            var taskRow = $(this);
+
+            // Change the status button value using ajax post request
+            $.ajax({
+                type: 'POST',
+                url: '/todo',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    if (callback.status === "Done"){
+                      $(taskRow).attr('class', 'status-button-done');
+                    }
+                    if (callback.status === "Undone"){
+                      $(taskRow).attr('class', 'status-button');
+                    }
+                    if (callback.status === "Urgent"){
+                      $(taskRow).attr('class', 'status-button-urgent');
+                    }
+                    $(taskRow).html(callback.status);
+                },
+                error: function() {
+                    $(examRow).html("error!");
+                }
+            });
+        });
+        // Delete an assessment using ajax post request
+        $("table").on("click", "#deleteButton", function(e) {
+          if(confirm("Are you sure you want to delete the assessment?") == true){
+        var taskId = $(this).val();
+        var hide = $(this);
+        var data = {taskId: taskId, status: "Delete"}
+        $.ajax({
+                type: 'POST',
+                url: '/todo',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if(callback.status === "DONE"){
+                        $(hide).closest('tr').remove();
+                    }
+                },
+                error: function() {
+                  alert("Something went wrong!");
+                }
+            });
+      }
+        }); 
+      });
+            
+</script>
+
+{% endblock %}
+<!--  Stuff I can ignore. Basically this resets the form and hides it. I used it wrongly initially
+if($(this).attr("id") == "newATForm") {
+  $("#newATForm").trigger('reset');
+  $(".new-at-form").toggleClass("active");
+ }
+if($(this).attr("id") == "newNATForm") {
+  $("#newNATForm").trigger('reset');
+  $(".new-nat-form").toggleClass("active");
+} -->

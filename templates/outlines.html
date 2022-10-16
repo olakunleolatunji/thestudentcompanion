@@ -1,0 +1,378 @@
+{% extends "layout.html" %}
+{% block title %}
+Course Outlines
+{% endblock %} 
+
+{% block main %}
+    
+<div class="page-container">
+    <form action="/outlines" method="post"> 
+        <select class="outline-select" name="outlineSelect" required>
+          <option disabled selected>Course Code</option> 
+          {% for course in courses %} 
+          <option value="{{ course.courseCode }}">{{ course.courseCode }}</option>
+          {% endfor %}  
+        </select>
+      <button class="outline-button" name="select" value="outlineBtn" type="submit">Check Outline</button>
+      {% if courseCode %}
+      <button id="outlineDeleteButton" class="outline-button" name="deleteOutline" value="{{ courseCode }}" type="button">Delete {{courseCode}} Outline </button>
+      {% endif %}
+    </form>
+    
+
+  <table class="table" id="outlineTable">
+    <h1 class="tablehead">Course Outlines</h1>
+    {% if courseCode %}
+    <h4 class="table-side-text">{{ courseCode }} Outline</h4>
+    {% else %}
+    <h4 class="table-side-text">Select an Outline</h4>
+    {% endif %}
+    <thead class="table-header">
+      <tr>
+        <th scope="col" class="outline-week-column" id="outlineWeek">Week</th>
+        <th scope="col" class="outline-topic-column">Topic</th>
+        <th scope="col" class="outline-details-column">Details</th>
+        <th scope="col" class="outline-status-column">Status</th>
+        <th scope="col" class="outline-edit-column">&#9998</th>
+      </tr>
+    </thead>
+    <tbody> 
+      {% for topic in courseOutline %}
+        
+      <tr>
+        <td scope="row" id="weekRow">{{ topic.topicWeek }}</td>
+        <td scope="row" class="wrap-this" id="topicRow">{{ topic.topic }}</td>
+        <td scope="row" class="wrap-this" id="detailsRow">{{ topic.topicDetails }}</td>
+        <td scope="row" id="statusRow">
+          {% if topic.topicStatus == "Undone" %}
+          <button class="status-button" type="submit" value="{{ topic.id }}" name="statusChanger">{{ topic.topicStatus }}</button>
+          {% elif topic.topicStatus == "Done" %}
+          <button class="status-button-done" type="submit" value="{{ topic.id }}" name="statusChanger">{{ topic.topicStatus }}</button>
+          {% elif topic.topicStatus == "Urgent" %}
+          <button class="status-button-urgent" type="submit" value="{{ topic.id }}" name="statusChanger">{{ topic.topicStatus }}</button>
+          {% endif %}
+        </td>
+        <td scope="row" id="optionsRow">
+          <div class="options-hamburger">
+          <div class="oh-linewrapper">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+            <div class="options-menu">
+              <ul>
+                <li>
+                  <a href="#editOutlineForm"><button type="submit" value="{{ topic.id }}" id="editButton" name="edit">Edit</button></a>
+                  <button id="deleteButton" type="submit" value="{{ topic.id }}" name="delete">&#10008</button> 
+                </li>
+            </ul>
+            </div>
+        </div>
+          
+        </td>
+      </tr> 
+      {% endfor %}
+      
+    </tbody>
+  </table>
+  {% if courseCode %}
+  <div class="new-button-div">
+    <a href="#newOutlineForm"><button class="new-course-button">Add a New Topic</button></a>
+  </div>
+  {% endif %}
+
+  <!-- Add A New Topic -->
+  <form class="new-course-form" id="newOutlineForm">
+        <div class="input-wrapper">
+        <h3 class="tablehead">Add New Topic to {{courseCode}} Outline</h3>
+        <input type="hidden" id="courseCode" value="{{ courseCode }}" name="courseCode">
+        <div class="input-box">
+          <label for="topicWeek">Topic Week</label>
+            <input autocomplete="off" autofocus class="form-control" id="topicWeek" name="topicWeek" placeholder="Enter topic week" type="number" min="0" required>
+        </div>
+        <div class="input-box">
+            <label for="topic">Topic</label>
+            <input autocomplete="off"  class="form-control" id="topic" name="topic" placeholder="Enter topic" type="text" maxlength="200" required>
+        </div>
+        <div class="input-box">
+            <label for="topicDetails">Topic Details</label>
+            <input autocomplete="off" class="form-control" id="topicDetails" name="topicDetails" placeholder="Enter topic details" type="text" maxlength="400" required>
+        </div>
+        <a href="/help#helpOutlineAddEditDelete"><div class="error"></div></a>
+        <button class="add-course-button" value="add" id="addButton" name="add" type="submit">Add Topic</button>
+      </div>
+  </form>
+  <!-- Edit an Old Topic -->
+  <form class="edit-course-form" id="editOutlineForm">
+    <div class="input-wrapper">
+    <h3 class="tablehead"></h3>
+    <div class="input-box">
+        <label for="topicWeek">Topic Week</label>
+        <input autocomplete="off" autofocus class="form-control" id="topicWeek" name="topicWeek" placeholder="Enter topic week" type="number" min="0" required>
+    </div>
+    <div class="input-box">
+      <label for="topic">Topic</label>
+        <input autocomplete="off"  class="form-control" id="topic" name="topic" placeholder="Enter topic" type="text" maxlength="200" required>
+    </div>
+    <div class="input-box">
+      <label for="topicDetails">Topic Details</label>
+        <input autocomplete="off" class="form-control" id="topicDetails" name="topicDetails" placeholder="Enter topic details" type="text" maxlength="400" required>
+    </div>
+    <a href="/help#helpOutlineAddEditDelete"><div class="error"></div></a>
+    <div class="input-wrapper-button-wrapper">
+    <button class="add-course-button" value="" id="cancelButton" name="cancel" type="submit">Cancel</button>
+    <button class="add-course-button" value="" id="saveButton" name="saveEdit" type="submit">Save</button>
+  </div>
+</div>
+  </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".new-course-button").click(function(){
+      if($(".new-course-button").hasClass("cancel")){
+      $(".new-course-button").removeClass("cancel");
+      $(".new-course-button").text("Add a New Topic");
+      $(".new-course-form").toggleClass("active");
+      $(".edit-course-form").removeClass("active");
+      $("#newOutlineForm").trigger("reset");
+      $(".error").text("");
+      return;
+    }
+    $(".new-course-form").toggleClass("active");
+      $(".edit-course-form").removeClass("active");
+      $(".new-course-button").addClass("cancel");
+      $(".new-course-button").text("Cancel");
+      $(".error").text("");
+    });
+// Show edit and delete buttons
+$(document).on("click", ".oh-linewrapper",function(e){
+  e.preventDefault();
+  var self = $(this).closest(".options-hamburger").children(".options-menu");
+  // If another options menu is open, close it first
+  if(self.hasClass("active")){
+    self.toggleClass("active");
+    return;
+  }
+  $(".options-menu").removeClass("active");
+  self.toggleClass("active"); 
+});
+
+$(document).on("click", "#outlineDeleteButton",function(e){
+      e.preventDefault();
+      var courseCode = $("#outlineDeleteButton").val();
+      if(confirm("Are you sure you want to delete " + courseCode +"'s outline?") == true){
+            if(confirm("This action cannot be reversed. Continue?") == true){
+              var data = {courseCode:courseCode, status: "deleteCourseOutline"}
+              $.ajax({
+              type: 'POST',
+              url:'/outlines',
+              dataType: 'json',
+              contentType: 'application/json; charset=utf-8',
+              data: JSON.stringify(data),
+              success: function(callback){
+                window.location.href="/outlines";
+              },
+              error: function(){
+                alert("Something Went Wrong!");
+              }
+              })
+
+      }} 
+});
+
+$("#newOutlineForm").on("submit", function(e){
+  e.preventDefault();
+  var data = {
+    courseCode: $("#newOutlineForm #courseCode").val(),
+    topicWeek: $("#newOutlineForm #topicWeek").val(),
+    topic: $("#newOutlineForm #topic").val(),
+    topicDetails: $("#newOutlineForm #topicDetails").val(),
+    topicId: null,
+    topicStatus: "Undone",
+    status: "add"
+  }
+  $.ajax({
+    type: 'POST',
+    url:'/outlines',
+    dataType: 'json',
+    contentType: 'application/json; charset=utf-8',
+    data: JSON.stringify(data),
+    success: function(callback){
+      $(".table tbody").append(
+        '<tr>' +
+        '<td scope="row" id="weekRow">'+callback.topicWeek+'</td>'+
+        '<td scope="row" class="wrap-this" id="topicRow">'+callback.topic+'</td>'+
+        '<td scope="row" class="wrap-this" id="detailsRow">'+callback.topicDetails+'</td>'+
+        '<td scope="row" id="statusRow">'+'<button class="status-button" type="submit" value="'+callback.topicId+'" name="statusChanger">'+callback.topicStatus+'</button>'+'</td>'+
+        '<td scope="row" id="optionsRow">' +
+          '<div class="options-hamburger">' +
+                  '<div class="oh-linewrapper">' +
+                    '<div class="dot"></div>' +
+                    '<div class="dot"></div>' +
+                    '<div class="dot"></div>' +
+                  '</div>' +
+                    '<div class="options-menu">' +
+                      '<ul>'+
+                        '<li>'+
+                          '<a href="#editOutlineForm"><button type="submit" value="'+callback.topicId+'" id="editButton" name="edit">Edit</button></a>'+
+                          '<button id="deleteButton" type="submit" value="'+callback.topicId+'" name="delete">&#10008</button>'+ 
+                          '</li>'+
+                    '</ul>'+
+                    '</div>' +
+                '</div>' +
+            '</td>' +
+            '</tr>'
+            );
+      $("#newOutlineForm").trigger('reset');
+      $(".new-course-form").removeClass("active");
+      $(".new-course-button").text("Add a New Topic");
+      $(".new-course-button").removeClass("cancel");
+      $(".error").text("");
+    },
+    error: function(){
+      $(".new-course-button").text("Cancel");
+      $(".error").text("Something Went Wrong!");
+    }
+  });
+});
+
+// Get form to edit topic
+$("table").on("click", "#editButton", function(e){
+  // Make sure the add form is only showing cancel when it's open
+  $(".new-course-button").removeClass("cancel");
+    $(".new-course-button").text("Add a New Topic");
+  // Make sure that clicking edit on a new row will open the form straight away
+  if($(".edit-course-form").hasClass("active")){
+    $(".edit-course-form").toggleClass("active");
+    }
+    $(".new-course-form").removeClass("active");
+  $(".edit-course-form").toggleClass("active");
+  window.rowtoedit = $(this);
+  var rowId = $(this).val();
+  var data = {rowId:rowId, courseCode:null, topicWeek: null, topic: null, topicDetails: null, status: "edit"}
+         $.ajax({
+                type: 'POST',
+                url: '/outlines',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback){
+                  $(".error").text("");
+                  $(".edit-course-form .tablehead").text("Edit " +callback.courseCode+ "'s Week " +callback.topicWeek+ " Topic");
+                  $(".edit-course-form #topicWeek").val(callback.topicWeek);
+                  $(".edit-course-form #topic").val(callback.topic);
+                  $(".edit-course-form #topicDetails").val(callback.topicDetails);
+                  $(".edit-course-form #cancelButton").val(callback.rowId);
+                  $(".edit-course-form #saveButton").val(callback.rowId);
+                },
+                error: function(){
+                  alert("Something went wrong!");
+                }
+}); });
+
+// Submit form, update database and html table
+$("#editOutlineForm").on("submit", function(e){
+  var data = {
+    topicId:  $(".edit-course-form #saveButton").val(),
+    topicWeek: $(".edit-course-form #topicWeek").val(), 
+    topic: $(".edit-course-form #topic").val(), 
+    topicDetails: $(".edit-course-form #topicDetails").val(), 
+    status: "saveEdit"}
+    e.preventDefault();
+    $.ajax({
+            type: 'POST',
+            url: '/outlines',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            success: function(callback) {
+              $(rowtoedit).closest('tr').children("#weekRow").text(callback.topicWeek);
+              $(rowtoedit).closest('tr').children("#topicRow").text(callback.topic);
+              $(rowtoedit).closest('tr').children("#detailsRow").text(callback.topicDetails);
+              $(rowtoedit).closest('tr').children("#editButton").val(callback.topicId);
+              $(rowtoedit).closest('tr').children("#deleteButton").val(callback.topicId);
+              $(".edit-course-form").toggleClass("active");
+              $(".options-menu").removeClass("active");
+              
+            },
+            error: function(){
+              $(".error").text("Something went wrong!");
+            }
+}); });
+
+// Hide the edit form because the user doesn't wish to edit any longer
+$(document).on("click", "#cancelButton",function(e){
+            e.preventDefault(); 
+            $(".edit-course-form").removeClass("active");
+            $(".options-menu").removeClass("active");
+            $(".error").text("");
+            $(".edit-course-form .tablehead").text("");
+            $(".edit-course-form #topicWeek").val("");
+            $(".edit-course-form #topic").val("");
+            $(".edit-course-form #topicDetails").val("");
+            $(".edit-course-form #cancelButton").val("");
+            $(".edit-course-form #saveButton").val("");
+          });
+
+// Update status button on single click
+$("table").on("click", ".status-button, .status-button-done, .status-button-urgent", function(e) {
+            var topicStatus = $(this).html();
+            var topicIdValue = $(this).val();
+            var data = {topicId: topicIdValue, status: topicStatus};
+            var topicRow = $(this);
+
+            $.ajax({
+                type: 'POST',
+                url: '/outlines',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if (callback.status === "Done"){
+                      $(topicRow).attr('class', 'status-button-done');
+                    }
+                    if (callback.status === "Undone"){
+                      $(topicRow).attr('class', 'status-button');
+                    }
+                    if (callback.status === "Urgent"){
+                      $(topicRow).attr('class', 'status-button-urgent');
+                    }
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    $(topicRow).html(callback.status);
+                },
+                error: function() {
+                    $(topicRow).html("error!");
+                }
+            });
+        });
+   
+        $("table").on("click", "#deleteButton", function(e) {
+          if(confirm("Are you sure you want to delete the topic outline?") == true){
+        var outlineId = $(this).val();
+        var hide = $(this);
+        var data = {topicId: outlineId, status: "Delete"}
+        $.ajax({
+                type: 'POST',
+                url: '/outlines',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function(callback) {
+                    if(callback.status === "DONE"){
+                        $(hide).closest('tr').remove();
+                    }
+                },
+                error: function() {
+                  alert("Something went wrong!");
+                }
+            });
+      }
+        });
+    
+      });
+
+        
+</script>
+
+{% endblock %}

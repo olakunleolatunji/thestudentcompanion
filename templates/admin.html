@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Student Companion: The Administrator </title>
+    <link rel="stylesheet" href="../static/style8.css">
+</head>
+<body>
+    <header>
+        <!-- The header becomes the logout button for admin  -->
+        <a href="/logout" class="logo admin"><img src="../static/books.png" alt="TSC"> TheStudentCompanion: Administrator </a>
+    </header>
+
+    <hr class="navbar-divider-solid">
+
+    <main class="admin-page-container">
+        <div class="admin-mega-container">
+            <div class="admin-container-header">
+                <h1>USERS</h1>
+            </div>
+            <div class="admin-container">
+                <div class="admin-container user split text">
+                    <h1>Number of Users</h1> <h1>{{usersCounts.total}}</h1>
+                </div>
+                <div class="admin-container user split canvas-container">
+                    <canvas id="userDoughnutChart"></canvas>
+                </div>
+                <div class="admin-container user split text black-bg">
+                    <h1>Average CGPA</h1> <h1>{{averageCGPA}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="admin-mega-container">
+            <div class="admin-container-header">
+                <h1>COURSE WORK</h1>
+            </div>
+            <div class="admin-container">
+                <div class="admin-container course split text">
+                    <h1>Number of Courses</h1> <h1>{{coursesCounts.total}}</h1> <h1>Total Units</h1> <h1>{{coursesCounts.units}}</h1>
+                </div>
+                <div class="admin-container course split text black-bg">
+                    <h1>Number of Topics</h1> <h1>{{outlineCounts.total}}</h1>
+                </div>
+                <div class="admin-container course split canvas-container">
+                    <canvas id="outlineDoughnutChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="admin-mega-container">
+            <div class="admin-container-header">
+                <h1>CLASSES</h1>
+            </div>
+            <div class="admin-container">
+                <div class="admin-container timetable split text-container">
+                    <div class="admin-container mini timetable split text left-align">
+                        <h1>Number of Classes {{timetableCounts.total}}</h1>
+                    </div>
+                    <div class="admin-container mini timetable split text right-align">
+                        <h1>{{timetableCounts.today}} Classes Today</h1>
+                    </div>
+                </div>
+                <div class="admin-container timetable split canvas-container">
+                    <canvas id="timetableChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="admin-mega-container">
+            <div class="admin-container-header">
+                <h1>TO-DO</h1>
+            </div>
+            <div class="admin-container todo">
+                <div class="admin-container todo split text-container">
+                    <div class="admin-container mini todo split text one">
+                        <h1>Number of Tasks</h1> <h1>{{todoCounts.total}}</h1>
+                    </div>
+                    <div class="admin-container mini todo split text two">
+                        <h1>{{todoCounts.totalAT}} Academic Tasks</h1> <h1>{{todoCounts.totalNAT}} Non-Academic Tasks</h1>
+                    </div>
+                </div>
+                <div class="admin-container todo split canvas-container">
+                    <canvas id="todoRadarChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="admin-mega-container">
+            <div class="admin-container-header">
+                <h1>ASSESSMENTS</h1>
+            </div>
+            <div class="admin-container exams">
+                <div class="admin-container exams split text-container">
+                    <div class="admin-container mini exams split text one black-bg">
+                        <h1>Number of Assessments</h1> <h1>{{assessmentCounts.total}}</h1>
+                    </div>
+                    <div class="admin-container mini exams split text two black-bg">
+                        <h1>{{assessmentCounts.exams}} Examinations</h1> <h1>{{assessmentCounts.ms}} Mid-Semesters</h1>
+                    </div>
+                    <div class="admin-container mini exams split text three black-bg">
+                        {% if assessmentCounts.today == 1 %}
+                        <h1>{{assessmentCounts.today}} Assessment Today</h1>
+                        {% else %}
+                        <h1>{{assessmentCounts.today}} Assessments Today</h1>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="admin-container exams split canvas-container">
+                    <canvas id="examStackedChart"></canvas> <br>
+                </div>
+            </div>
+        </div>
+        <div class="admin-mega-container">
+            <div class="admin-container-header">
+                <h1>THEMES</h1>
+            </div>
+            <div class="admin-container theme">
+                <div class="admin-container theme split canvas-container">
+                    <canvas id="themeChart"></canvas> <br>
+                </div>
+            </div>
+        </div>
+        <div class="admin-mega-container">
+            <div class="admin-container-header">
+                <h1>BUGS & FEEDBACK</h1>
+            </div>
+            <div class="admin-container bugs-feedback">
+                <div class="admin-container bugs split text">
+                    <div class="admin-container bugs mini">
+                    <h3 id="bugs-toggle">Bugs ({{bugs_feedbackCounts.bugs}})</h3>
+                        {% for bug in bugs %}
+                        <div class="entry">
+                        <h5 class="bugs-text">{{bug.username}} (ID: {{bug.user_id}}) <button id="deleteBug" type="submit" value="{{ bug.id }}" name="delete">&#10008</button></h5> 
+                        <p class="bugs-text">{{bug.bugPage}}: {{bug.bugDetails}}</p> <br>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="admin-container feedback split text">
+                    <div class="admin-container feedback mini">
+                    <h3 id="comments-toggle">Comments ({{bugs_feedbackCounts.comments}})</h3>
+                        {% for comment in comments %}
+                        <div class="entry">
+                        <h5 class="comments-text">{{comment.username}} (ID: {{comment.user_id}}) <button id="deleteComment" type="submit" value="{{ comment.id }}" name="delete">&#10008</button></h5> 
+                        <p class="comments-text">{{comment.feedbackDetails}}</p> <br>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="admin-container feedback mini">
+                        <h3 id="questions-toggle">Questions ({{bugs_feedbackCounts.questions}})</h3>
+                        {% for question in questions %}
+                        <div class="entry">
+                        <h5 class="questions-text">{{question.username}} (ID: {{question.user_id}}) <button id="deleteQuestion" type="submit" value="{{ question.id }}" name="delete">&#10008</button></h5> 
+                        <p class="questions-text">{{question.feedbackDetails}}</p> <br>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="admin-container feedback mini">
+                        <h3 id="suggestions-toggle">Suggestions ({{bugs_feedbackCounts.suggestions}})</h3>
+                        {% for suggestion in suggestions %}
+                        <div class="entry">
+                        <h5 class="suggestions-text">{{suggestion.username}} (ID: {{suggestion.user_id}}) <button id="deleteSuggestion" type="submit" value="{{ suggestion.id }}" name="delete">&#10008</button></h5> 
+                        <p class="suggestions-text">{{suggestion.feedbackDetails}}</p> <br>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <footer id="footer">
+        Stay in school kids! 
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+             window.onload = function(e){
+                e.preventDefault();
+
+                // Control sizes and do some sort of media query
+                Chart.defaults.font.size = 18;
+                Chart.defaults.font.family = 'Poppins';
+                Chart.defaults.color = 'black';
+
+                if(window.innerWidth <= 900){
+                    Chart.defaults.font.size = 20;
+                }
+                if(window.innerWidth <= 800){
+                    Chart.defaults.font.size = 13;
+                }
+
+                const userChart = document.getElementById('userDoughnutChart');
+                const chart = new Chart(userChart, {
+                    type: 'doughnut',
+                    data:{ labels: [
+                            'Active',
+                            'Deactivated',
+                            'Deleted'
+                        ],
+                        datasets: [{
+                            label: 'Users by status',
+                            data: ['{{usersCounts.active}}', '{{usersCounts.deactived}}', '{{usersCounts.deleted}}'],
+                            backgroundColor: [
+                            '#a9543f',
+                            '#eabe7d',
+                            '#5f6a63'
+                            ],
+                            hoverOffset: 4
+                        }] 
+                        },
+                      options:{
+                        plugins: {
+                        title: {
+                            display: true,
+                            position: 'bottom',
+                            color: 'black',
+                            text: 'Users Breakdown'
+                        },
+                        }
+                      }
+                    });
+                
+                const outlineChart = document.getElementById('outlineDoughnutChart');
+                const chart2 = new Chart(outlineChart, {
+                    type: 'doughnut',
+                    data:{ labels: [
+                            'Undone',
+                            'Urgent',
+                            'Done'
+                        ],
+                        datasets: [{
+                            label: 'Topics by Status',
+                            data: ['{{outlineCounts.undone}}', '{{outlineCounts.urgent}}', '{{outlineCounts.done}}'],
+                            backgroundColor: [
+                            '#d86d3c',
+                            '#a4d0bb',
+                            '#79a1b0'
+                            ],
+                            hoverOffset: 4
+                        }] 
+                        },
+                      options:{
+                        plugins: {
+                        title: {
+                            display: true,
+                            position: 'bottom',
+                            color: 'black',
+                            text: 'Topics by Status'
+                        },
+                        }
+                      }
+                    });
+
+                const timetableChart = document.getElementById('timetableChart');
+                const chart3 = new Chart(timetableChart, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                        datasets: [{
+                            label: 'Classes',
+                            data: ['{{timetableCounts.monday}}', '{{timetableCounts.tuesday}}', '{{timetableCounts.wednesday}}', '{{timetableCounts.thursday}}', 
+                                    '{{timetableCounts.friday}}', '{{timetableCounts.saturday}}', '{{timetableCounts.sunday}}'],
+                            backgroundColor: [
+                                '#96020233',
+                                '#454d6633',
+                                '#69620d33',
+                                '#e2930033',
+                                '#0d723933',
+                                '#857b4e33',
+                                '#14127433'
+                            ],
+                            borderColor: [
+                                '#960202',
+                                '#454d66',
+                                '#69620d',
+                                '#e29300',
+                                '#0d7239',
+                                '#857b4e',
+                                '#141274'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                        title: {
+                            display: true,
+                            position: 'bottom',
+                            color: 'black',
+                            text: 'Classes by Day'
+                        },
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+                
+                const todoChart = document.getElementById('todoRadarChart');
+                const chart4 = new Chart(todoChart, {
+                    type: 'radar',
+                    data: {
+                            labels: [
+                                'Undone',
+                                'Urgent',
+                                'Done',
+                            ],
+                            datasets: [{
+                                label: 'Non-Academic Tasks',
+                                data: ['{{todoCounts.undoneNAT}}', '{{todoCounts.urgentNAT}}', '{{todoCounts.doneNAT}}'],
+                                fill: true,
+                                backgroundColor: '#d6624533',
+                                borderColor: '#d66245',
+                                pointBackgroundColor: '#d66245',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: '#d66245'
+                            }, {
+                                label: 'Academic Tasks',
+                                data: ['{{todoCounts.undoneAT}}', '{{todoCounts.urgentAT}}', '{{todoCounts.doneAT}}'],
+                                fill: true,
+                                backgroundColor: '#0d723933',
+                                borderColor: '#0d7239',
+                                pointBackgroundColor: '#0d7239',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: '#0d7239'
+                            }]
+                            },
+                        options: {  
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    position: 'bottom',
+                                    color: 'black',
+                                    text: 'Tasks by Status'
+                                },
+                            }, 
+                            scales: {
+                                r: {
+                                    suggestedMin: 0,
+                                    pointLabels: {
+                                        font: {
+                                            size: 16
+                                        }
+                                    }
+                                }
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            elements: {
+                            line: {
+                                    borderWidth: 3
+                                }
+                                }
+                           
+                    } 
+        }); 
+
+                const examChart = document.getElementById('examStackedChart');
+                const chart5 = new Chart(examChart, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Exams', 'Mid-Semesters'],
+                        datasets: [
+                            {
+                            label: 'Undone',
+                            data: ['{{assessmentCounts.undoneE}}','{{assessmentCounts.undoneMS}}'],
+                            backgroundColor: '#343a40',
+                            },
+                            {
+                            label: 'Done',
+                            data: ['{{assessmentCounts.doneE}}','{{assessmentCounts.doneMS}}'],
+                            backgroundColor: '#acb2b2',
+                            },
+                        ]
+                        },
+                    options: {
+                        plugins: {
+                        title: {
+                            display: true,
+                            position: 'bottom',
+                            color: 'black',
+                            text: 'Assessments Breakdown'
+                        },
+                        },
+                        responsive: true,
+                        scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true
+                        }
+                        }
+                    }
+                });
+
+                const themeChart = document.getElementById('themeChart');
+                const chart6 = new Chart(themeChart, {
+                    type: 'bar',
+                    data: {
+                        labels: ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10'],
+                        datasets: [{
+                            label: 'Themes',
+                            data: ['{{styleCounts.p1}}', '{{styleCounts.p2}}', '{{styleCounts.p3}}','{{styleCounts.p4}}',
+                                    '{{styleCounts.p5}}', '{{styleCounts.p6}}', '{{styleCounts.p7}}', '{{styleCounts.p8}}',
+                                    '{{styleCounts.p9}}', '{{styleCounts.p10}}'],
+                            backgroundColor: [
+                                '#a9543f33',
+                                '#304c8933',
+                                '#857b4e33',
+                                '#79a1b033',
+                                '#3f612d33',
+                                '#96020233',
+                                '#00000033',
+                                '#d6624533',
+                                '#454d6633',
+                                '#e2930033'
+                            ],
+                            borderColor: [
+                                '#a9543f',
+                                '#304c89',
+                                '#857b4e',
+                                '#79a1b0',
+                                '#3f612d',
+                                '#960202',
+                                '#000000',
+                                '#d66245',
+                                '#454d66',
+                                '#e29300'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                        title: {
+                            display: true,
+                            position: 'bottom',
+                            color: 'black',
+                            text: 'Themes by Usage'
+                        },
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+                
+            };
+            $(document).on("click", "#bugs-toggle", function(e){
+                e.preventDefault();
+                $(".bugs-text").toggleClass("hide");
+            });
+            $(document).on("click", "#suggestions-toggle", function(e){
+                e.preventDefault();
+                $(".suggestions-text").toggleClass("hide");
+            });
+            $(document).on("click", "#comments-toggle", function(e){
+                e.preventDefault();
+                $(".comments-text").toggleClass("hide");
+            });
+            $(document).on("click", "#questions-toggle", function(e){
+                e.preventDefault();
+                $(".questions-text").toggleClass("hide");
+            });
+
+            $(document).on("click", "#deleteBug, #deleteSuggestion, #deleteComment, #deleteQuestion", function(e) {
+                e.preventDefault();
+                if(confirm("Are you sure you want to delete this entry?") == true){
+                var entryId = $(this).val();
+                var hide = $(this);
+                var data = {id: entryId, status: $(this).attr("id")};
+                $.ajax({
+                        type: 'POST',
+                        url: '/admin',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(data),
+                        success: function(callback) {
+                            if(callback.status === "DONE"){
+                                $(hide).closest('.entry').remove();
+                            }
+                            if(hide.attr("id") === "deleteBug"){
+                                $("#bugs-toggle").text("Bugs ("+callback.number+")");
+                            }
+                            if(hide.attr("id") === "deleteSuggestion"){
+                                $("#suggestions-toggle").text("Suggestions ("+callback.number+")");
+                            }
+                            if(hide.attr("id") === "deleteQuestion"){
+                                $("#questions-toggle").text("Questions ("+callback.number+")");
+                            }
+                            if(hide.attr("id") === "deleteComment"){
+                                $("#comments-toggle").text("Comments ("+callback.number+")");
+                            }
+                        },
+                        error: function() {
+                        alert("Something went wrong!");
+                        }
+                    });
+            }
+            }); 
+
+      </script>
+</body>
+</html>
