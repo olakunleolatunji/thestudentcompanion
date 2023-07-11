@@ -1,7 +1,7 @@
 # TheStudentCompanion
 The Student Companion is a web-based semester planner application built using HTML, CSS, JavaScript, Python (Flask) and SQLAlchemy.
 <br />
-What it looks like (all themes used): <br />
+What it looks like (all themes used):
 <img src="https://64.media.tumblr.com/0f677f7e78b82da63695bd7af2f84dfe/9be0592d7b717ce9-c4/s2048x3072/6cedea3edc4333beba1b9011773f4b168a0779b2.pnj" alt="Index Page">
 <br>
 <img src="https://64.media.tumblr.com/7bed48d0b863e98b71956fc2a8646636/9be0592d7b717ce9-11/s2048x3072/69de0708db795e8675e7ba83fe9f41ea8453d533.pnj" alt="Home Page">
